@@ -3,12 +3,12 @@ Espacio de Trabajo del Equipo Noob Power para la Materia MISW-4407: Introduccion
 
 ## Integrantes:
 
-|   Nombre                         |   Correo                      |
-|----------------------------------|-------------------------------|
-| Sara Giselle Ramírez Pimiento    | sg.ramirez940@uniandes.edu.co |
-| Juan David Salguero              | j.salguero@uniandes.edu.co    |
-| Nicolás Rey                      | n.reyd@uniandes.edu.co        |
-| Shiomar Alberto Salazar Castillo | s.salazarc@uniandes.edu.co    |
+|   Nombre                         |   Correo                      | Codigo    |
+|----------------------------------|-------------------------------|-----------|
+| Sara Giselle Ramírez Pimiento    | sg.ramirez940@uniandes.edu.co | 201112368 |
+| Juan David Salguero              | j.salguero@uniandes.edu.co    | 201923136 |
+| Nicolás Rey                      | n.reyd@uniandes.edu.co        | 202317668 |
+| Shiomar Alberto Salazar Castillo | s.salazarc@uniandes.edu.co    | 202213359 |
 
 ## Estructura del Proyecto
 ```
