@@ -1,0 +1,112 @@
+@startuml
+entity Player
+entity Player_Bullet
+entity Enemy
+entity Enemy_Bullet
+entity Explotion
+entity Enemy_Spwanner
+entity Player_Input
+
+
+class CSurface {
+    Color : Pygame.Vector2
+    Size : Pygame.Vector 2
+}
+class CTransform {
+    Pos : Pygame.Vector2
+}
+class CVelocity {
+    Vel : Pygame.Vector2
+}
+class CAnimation {
+    Number_frames: Int
+    animation_list : List[AnimationData]
+}
+class CPlayerState {
+    state : PlayerState
+}
+class PlayerState {
+    Enum
+}
+class AnimationData {
+    name: Str
+    start: Int
+    end: Int
+    frameRate: Float
+}
+class CEnemySpawner {
+    current_time : Float
+    spwan_evenet_data : List[SpwanEventData]
+}
+class SpwanEventData {
+    time : Float
+    enemy_type : Str
+    pos : Pygame.Vector2
+    trigerred : Boolean
+}
+class CInputCommnad {
+    name : Str
+    key: inter
+    phase : CommandPhase
+}
+class CommandPhase {
+    Enum
+}
+class CTagBullet_Player
+class CTagBullet_Enemy
+class CTagEnemy
+class CTagExplotion
+class CTagPlayer
+
+
+stereotype system_movement
+stereotype system_rendering
+stereotype system_screen_bounce
+stereotype system_collision_enemy_bullet
+stereotype system_collision_player_enemy
+stereotype system_explosion_kill
+stereotype system_input_player
+stereotype system_player_state
+stereotype system_screen_bullet
+stereotype system_screen_player
+
+
+CAnimation <|-- AnimationData
+CPlayerState <|-- PlayerState
+CEnemySpawner <|-- SpwanEventData
+CInputCommnad <|-- CommandPhase
+
+Player *-- CPlayerState
+Player *-- CSurface
+Player *-- CTransform
+Player *-- CVelocity
+Player *-- CTagPlayer
+Player *-- CAnimation
+
+Enemy *-- CTagEnemy
+Enemy *-- CAnimation
+Enemy *-- CSurface
+Enemy *-- CTransform
+Enemy *-- CVelocity
+
+Enemy_Bullet *-- CTagBullet_Enemy
+Enemy_Bullet *-- CSurface
+Enemy_Bullet *-- CTransform
+Enemy_Bullet *-- CVelocity
+
+Player_Bullet *-- CTagBullet_Player
+Player_Bullet *-- CSurface
+Player_Bullet *-- CTransform
+Player_Bullet *-- CVelocity
+
+Explotion *-- CTagExplotion
+Explotion *-- CAnimation
+Explotion *-- CSurface
+Explotion *-- CTransform
+Explotion *-- CVelocity
+
+Player_Input *-- CInputCommnad
+
+Enemy_Spwanner *-- CEnemySpawner
+
+@enduml
