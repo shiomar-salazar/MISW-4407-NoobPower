@@ -12,7 +12,8 @@ Espacio de Trabajo del Equipo Noob Power para la Materia MISW-4407: Introduccion
 
 ## Diagrama de actual del proyecto
 > Imagen generada con plantUML
-[image](https://github.com/shiomar-salazar/MISW-4407-NoobPower/blob/main/Documentation/digram.png)
+
+<img src="https://github.com/shiomar-salazar/MISW-4407-NoobPower/blob/main/Documentation/digram.png">
 
 ## Estructura del Proyecto
 ```
