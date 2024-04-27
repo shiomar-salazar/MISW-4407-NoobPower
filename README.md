@@ -26,6 +26,7 @@ MISW-4407-NoobPower
 │  └─ settings.json
 ├─ assets
 │  ├─ cfg
+│  │  ├─ bullet.json
 │  │  ├─ enemies.json
 │  │  ├─ enemy_field.json
 │  │  ├─ interface.json
@@ -69,23 +70,28 @@ MISW-4407-NoobPower
    ├─ ecs
    │  ├─ components
    │  │  ├─ c_animation.py
+   │  │  ├─ c_input_command.py
    │  │  ├─ c_surface.py
    │  │  ├─ c_transform.py
    │  │  ├─ c_velocity.py
    │  │  ├─ tags
-   │  │  │  └─ c_tag_enemy.py
+   │  │  │  ├─ c_tag_enemy.py
+   │  │  │  └─ c_tag_player_bullet.py
    │  │  └─ __init__.py
    │  ├─ systems
    │  │  ├─ s_animation.py
+   │  │  ├─ s_input_player.py
    │  │  ├─ s_movement.py
    │  │  ├─ s_rendering.py
    │  │  ├─ s_screen_bounce.py
+   │  │  ├─ s_screen_bullet.py
    │  │  └─ __init__.py
    │  └─ __init__.py
    ├─ engine
    │  ├─ game_engine.py
    │  ├─ services
-   │  │  └─ images_services.py
+   │  │  ├─ images_services.py
+   │  │  └─ sounds_service.py
    │  ├─ service_locator.py
    │  └─ __init__.py
    └─ __init__.py
