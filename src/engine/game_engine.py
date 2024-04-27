@@ -3,7 +3,8 @@ import json
 import pygame
 import esper
 
-from src.create.prefab_creator import create_square
+from src.create.prefab_creator import create_level
+from src.ecs.systems.s_animation import system_animation
 from src.ecs.systems.s_movement import system_movement
 from src.ecs.systems.s_rendering import system_rendering
 from src.ecs.systems.s_screen_bounce import system_screen_bounce
@@ -27,12 +28,13 @@ class GameEngine:
                                      self.window_cfg["bg_color"]["b"])
         self.ecs_world = esper.World()
 
-        # Original framerate = 0
-        # Original bg_color (0, 200, 128)
-
     def _load_config_files(self):
         with open("assets/cfg/window.json", encoding="utf-8") as window_file:
             self.window_cfg = json.load(window_file)
+        with open("assets/cfg/enemies.json", encoding="utf-8") as enemy_file:
+            self.enemies_cfg = json.load(enemy_file)
+        with open("assets/cfg/enemy_field.json", encoding="utf-8") as enemy_field:
+            self.level_cfg = json.load(enemy_field)
 
     async def run(self) -> None:
         self._create()
@@ -46,11 +48,7 @@ class GameEngine:
         self._clean()
 
     def _create(self):
-        create_square(self.ecs_world, 
-                        pygame.Vector2(50, 50),
-                        pygame.Vector2(150, 100),
-                        pygame.Vector2(-100, 200),
-                        pygame.Color(255, 255, 100))
+        create_level(self.ecs_world, self.enemies_cfg, self.level_cfg, self.window_cfg)
 
     def _calculate_time(self):
         self.clock.tick(self.framerate)
@@ -64,6 +62,7 @@ class GameEngine:
     def _update(self):
         system_movement(self.ecs_world, self.delta_time)
         system_screen_bounce(self.ecs_world, self.screen)
+        system_animation(self.ecs_world, self.delta_time)
 
     def _draw(self):
         self.screen.fill(self.bg_color)

@@ -1,0 +1,26 @@
+{
+    "fila1": {
+        "enemy_type": "EnemyA",
+        "count" : 10
+    },
+    "fila2": {
+        "enemy_type": "EnemyA",
+        "count" : 10
+    },
+    "fila3": {
+        "enemy_type": "EnemyA",
+        "count" : 10
+    },
+    "fila4": {
+        "enemy_type": "EnemyB",
+        "count" : 8
+    },
+    "fila5": {
+        "enemy_type": "EnemyC",
+        "count" : 6
+    },
+    "fila6": {
+        "enemy_type": "EnemyD",
+        "count" : 2
+    }
+}
