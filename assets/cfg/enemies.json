@@ -1,0 +1,76 @@
+{
+    "EnemyA" : {
+        "image" : "assets/img/invaders_enemy_01.png",
+        "animations": {
+            "number_frames": 5,
+            "list": [
+                {
+                    "name": "MOVE",
+                    "start": 0,
+                    "end": 4,
+                    "framerate": 10
+                },
+                {
+                    "name": "IDLE",
+                    "start": 0,
+                    "end": 0,
+                    "framerate": 1
+                }
+            ]
+        }
+    },
+    "EnemyB" : {
+        "image" : "assets/img/invaders_enemy_02.png",
+        "animations": {
+            "number_frames": 5,
+            "list": [
+                {
+                    "name": "MOVE",
+                    "start": 0,
+                    "end": 4,
+                    "framerate": 10
+                },
+                {
+                    "name": "IDLE",
+                    "start": 0,
+                    "end": 0,
+                    "framerate": 1
+                }
+            ]
+        }
+    },
+    "EnemyC" : {
+        "image" : "assets/img/invaders_enemy_03.png",
+        "animations": {
+            "number_frames": 5,
+            "list": [
+                {
+                    "name": "MOVE",
+                    "start": 0,
+                    "end": 4,
+                    "framerate": 10
+                },
+                {
+                    "name": "IDLE",
+                    "start": 0,
+                    "end": 0,
+                    "framerate": 1
+                }
+            ]
+        }
+    },
+    "EnemyD": {
+        "image" : "assets/img/invaders_enemy_04.png",
+        "animations": {
+            "number_frames": 1,
+            "list": [
+                {
+                    "name": "IDLE",
+                    "start": 0,
+                    "end": 0,
+                    "framerate": 1
+                }
+            ]
+        }
+    }
+}
