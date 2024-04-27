@@ -1,8 +1,9 @@
 @startuml
 entity Enemy
+entity Player_Bullet
+entity Input_Fire
 /'
 entity Player
-entity Player_Bullet
 entity Enemy_Bullet
 entity Explotion
 entity Player_Input
@@ -30,20 +31,20 @@ class AnimationData {
     end: Int
     frameRate: Float
 }
-
-/'
-class CPlayerState {
-    state : PlayerState
-}
-class PlayerState {
-    Enum
-}
 class CInputCommnad {
     name : Str
     key: inter
     phase : CommandPhase
 }
 class CommandPhase {
+    Enum
+}
+
+/'
+class CPlayerState {
+    state : PlayerState
+}
+class PlayerState {
     Enum
 }
 '/
@@ -61,25 +62,34 @@ stereotype system_animation
 stereotype system_movement
 stereotype system_rendering
 stereotype system_screen_bounce
+stereotype system_screen_bullet
+stereotype system_input_player
 /'
 stereotype system_collision_enemy_bullet
 stereotype system_collision_player_enemy
 stereotype system_explosion_kill
-stereotype system_input_player
 stereotype system_player_state
-stereotype system_screen_bullet
 stereotype system_screen_player
 '/
 
 CAnimation <|-- AnimationData
+CInputCommnad <|-- CommandPhase
 /'
 CPlayerState <|-- PlayerState
-CInputCommnad <|-- CommandPhase
 '/
 
 Enemy *-- CTagEnemy
 Enemy *-- CAnimation
 Enemy *-- CSurface
 Enemy *-- CTransform
+Enemy *-- CVelocity
+
+Player_Bullet *-- CTagBullet_Player
+Player_Bullet *-- CSurface
+Player_Bullet *-- CTransform
+Player_Bullet *-- CVelocity
+
+Input_Fire *-- CInputCommnad
+
 
 @enduml
