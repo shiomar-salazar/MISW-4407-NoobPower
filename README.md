@@ -18,12 +18,16 @@ Espacio de Trabajo del Equipo Noob Power para la Materia MISW-4407: Introduccion
 ## Estructura del Proyecto
 ```
 MISW-4407-NoobPower
+├─ .git
+├─ .gitignore
 ├─ .pylintrc
 ├─ .vscode
 │  ├─ launch.json
 │  └─ settings.json
 ├─ assets
 │  ├─ cfg
+│  │  ├─ enemies.json
+│  │  ├─ enemy_field.json
 │  │  ├─ interface.json
 │  │  ├─ starfield.json
 │  │  └─ window.json
@@ -49,7 +53,9 @@ MISW-4407-NoobPower
 │     ├─ game_start.ogg
 │     ├─ player_die.ogg
 │     └─ player_shoot.ogg
-├─ build
+├─ Documentation
+│  ├─ digram.png
+│  └─ digram.puml
 ├─ esper
 │  ├─ py.typed
 │  └─ __init__.py
@@ -62,11 +68,15 @@ MISW-4407-NoobPower
    │  └─ __init__.py
    ├─ ecs
    │  ├─ components
+   │  │  ├─ c_animation.py
    │  │  ├─ c_surface.py
    │  │  ├─ c_transform.py
    │  │  ├─ c_velocity.py
+   │  │  ├─ tags
+   │  │  │  └─ c_tag_enemy.py
    │  │  └─ __init__.py
    │  ├─ systems
+   │  │  ├─ s_animation.py
    │  │  ├─ s_movement.py
    │  │  ├─ s_rendering.py
    │  │  ├─ s_screen_bounce.py
@@ -74,6 +84,10 @@ MISW-4407-NoobPower
    │  └─ __init__.py
    ├─ engine
    │  ├─ game_engine.py
+   │  ├─ services
+   │  │  └─ images_services.py
+   │  ├─ service_locator.py
    │  └─ __init__.py
    └─ __init__.py
+
 ```
