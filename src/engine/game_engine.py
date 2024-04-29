@@ -5,6 +5,8 @@ import esper
 
 from src.create.prefab_creator import create_bullet, create_input_player, create_level, create_player
 from src.ecs.components.c_input_command import CInputCommand, CommandPhase
+from src.ecs.components.c_surface import CSurface
+from src.ecs.components.c_transform import CTransform
 from src.ecs.components.c_velocity import CVelocity
 from src.ecs.components.tags.c_tag_player_bullet import CTagPlayerBullet
 from src.ecs.systems.s_animation import system_animation
@@ -60,6 +62,8 @@ class GameEngine:
     def _create(self):
         self.player_entity = create_player(self.ecs_world, self.player_cfg, self.screen)
         self.player_c_v = self.ecs_world.component_for_entity(self.player_entity, CVelocity)
+        self.player_c_t = self.ecs_world.component_for_entity(self.player_entity, CTransform)
+        self.player_c_s = self.ecs_world.component_for_entity(self.player_entity, CSurface)
         create_level(self.ecs_world, self.enemies_cfg, self.level_cfg, self.window_cfg)
         create_input_player(self.ecs_world)
 
@@ -95,8 +99,8 @@ class GameEngine:
     def _do_action(self, c_input: CInputCommand):
         if c_input.name == "PLAYER_FIRE" and c_input.phase == CommandPhase.START and self.player_bullets == 0:
             #TODO: Shiomar -> Agregar datos de player (Pos y Size)
-            create_bullet(self.ecs_world, pygame.Vector2(150,150),
-                          pygame.Vector2(15,15), self.bullet_cfg)
+            create_bullet(self.ecs_world, self.player_c_t.pos,
+                          self.player_c_s.area.size, self.bullet_cfg)
         #Input de movimiento del jugador
         elif c_input.name == 'PLAYER_LEFT':
             if c_input.phase == CommandPhase.START:
