@@ -8,6 +8,7 @@ from src.ecs.components.c_surface import CSurface
 from src.ecs.components.c_transform import CTransform
 from src.ecs.components.c_velocity import CVelocity
 from src.ecs.components.tags.c_tag_enemy import CTagEnemy
+from src.ecs.components.tags.c_tag_player import CTagPlayer
 from src.ecs.components.tags.c_tag_player_bullet import CTagPlayerBullet
 from src.engine.service_locator import ServiceLocator
 
@@ -53,9 +54,12 @@ def create_level(ecs_world:esper.World, enemies_data:dict, level_data:dict, wind
         j -= 12
 
 def create_input_player(world: esper.World):
+    input_left = world.create_entity()
+    input_right = world.create_entity()
     input_fire = world.create_entity()
-    world.add_component(input_fire,
-                        CInputCommand("PLAYER_FIRE", pygame.K_z))
+    world.add_component(input_fire,CInputCommand("PLAYER_FIRE", pygame.K_z))
+    world.add_component(input_left, CInputCommand('PLAYER_LEFT', pygame.K_LEFT))
+    world.add_component(input_right, CInputCommand('PLAYER_RIGHT', pygame.K_RIGHT))
 
 def create_bullet(world: esper.World, player_pos: pygame.Vector2,
                   player_size: pygame.Vector2, bullet_info: dict):
@@ -68,3 +72,12 @@ def create_bullet(world: esper.World, player_pos: pygame.Vector2,
     bullet_entity = create_square(world, size, pos, vel, color)
     world.add_component(bullet_entity, CTagPlayerBullet())
     ServiceLocator.sounds_service.play(bullet_info["sound"])
+
+def create_player(world:esper.World, player_info:dict, screen:pygame.Surface):
+    player_surface = ServiceLocator.images_service.get(player_info["image"])
+    ps_size = player_surface.get_size() 
+    position_o = pygame.Vector2(screen.get_rect().midbottom[0] - ps_size[0]/2, screen.get_rect().midbottom[1] - ps_size[1]/2 - 15)
+    velocity_o = pygame.Vector2(0,0)
+    player_entity = create_sprite(world, position_o, velocity_o, player_surface)
+    world.add_component(player_entity, CTagPlayer())
+    return player_entity
