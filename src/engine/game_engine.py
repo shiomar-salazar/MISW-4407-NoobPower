@@ -10,6 +10,8 @@ from src.ecs.components.c_transform import CTransform
 from src.ecs.components.c_velocity import CVelocity
 from src.ecs.components.tags.c_tag_player_bullet import CTagPlayerBullet
 from src.ecs.systems.s_animation import system_animation
+from src.ecs.systems.s_collision_enemy_bullet import system_collision_enemy_bullet
+from src.ecs.systems.s_explosion_kill import system_explosion_kill
 from src.ecs.systems.s_input_player import system_input_player
 from src.ecs.systems.s_movement import system_movement
 from src.ecs.systems.s_player_limits import system_player_limits
@@ -47,6 +49,8 @@ class GameEngine:
             self.bullet_cfg = json.load(bullet_file)
         with open("assets/cfg/player.json", encoding="utf-8") as player_file:
             self.player_cfg = json.load(player_file)
+        with open("assets/cfg/explosion.json", encoding="utf-8") as explosion_file:
+            self.explosion_cfg = json.load(explosion_file)
 
     async def run(self) -> None:
         self._create()
@@ -82,6 +86,8 @@ class GameEngine:
         system_screen_bullet(self.ecs_world, self.screen)
         system_player_limits(self.ecs_world, self.screen)
         system_screen_bounce(self.ecs_world, self.screen)
+        system_collision_enemy_bullet(self.ecs_world, self.explosion_cfg["enemy_explosion"])
+        system_explosion_kill(self.ecs_world)
         system_animation(self.ecs_world, self.delta_time)
 
         self.ecs_world._clear_dead_entities()

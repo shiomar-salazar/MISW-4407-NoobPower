@@ -8,6 +8,7 @@ from src.ecs.components.c_surface import CSurface
 from src.ecs.components.c_transform import CTransform
 from src.ecs.components.c_velocity import CVelocity
 from src.ecs.components.tags.c_tag_enemy import CTagEnemy
+from src.ecs.components.tags.c_tag_explosion import CTagExplosion
 from src.ecs.components.tags.c_tag_player import CTagPlayer
 from src.ecs.components.tags.c_tag_player_bullet import CTagPlayerBullet
 from src.engine.service_locator import ServiceLocator
@@ -81,3 +82,12 @@ def create_player(world:esper.World, player_info:dict, screen:pygame.Surface):
     player_entity = create_sprite(world, position_o, velocity_o, player_surface)
     world.add_component(player_entity, CTagPlayer())
     return player_entity
+
+def create_explosion(world:esper.World, pos:pygame.Vector2, explosion_info:dict):
+    explosion_surface = ServiceLocator.images_service.get(explosion_info["image"])
+    vel = pygame.Vector2(0, 0)
+    explosion_ent = create_sprite(world, pos, vel, explosion_surface)
+    world.add_component(explosion_ent, CTagExplosion())
+    world.add_component(explosion_ent, CAnimation(explosion_info["animations"]))
+    ServiceLocator.sounds_service.play(explosion_info["sound"])
+    return explosion_ent
