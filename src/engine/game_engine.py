@@ -11,6 +11,7 @@ from src.ecs.components.c_velocity import CVelocity
 from src.ecs.components.tags.c_tag_player_bullet import CTagPlayerBullet
 from src.ecs.systems.s_animation import system_animation
 from src.ecs.systems.s_collision_enemy_bullet import system_collision_enemy_bullet
+from src.ecs.systems.s_enemy_block_movement import system_enemy_block_movement
 from src.ecs.systems.s_explosion_kill import system_explosion_kill
 from src.ecs.systems.s_input_player import system_input_player
 from src.ecs.systems.s_movement import system_movement
@@ -83,6 +84,7 @@ class GameEngine:
 
     def _update(self):
         system_movement(self.ecs_world, self.delta_time)
+        system_enemy_block_movement(self.ecs_world, self.delta_time, self.window_cfg["size"]["w"])
         system_screen_bullet(self.ecs_world, self.screen)
         system_player_limits(self.ecs_world, self.screen)
         system_screen_bounce(self.ecs_world, self.screen)

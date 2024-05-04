@@ -28,13 +28,12 @@ def create_sprite(world: esper.World, pos: pygame.Vector2, vel: pygame.Vector2, 
     world.add_component(sprite_entity, CSurface.from_surface(surface))
     return sprite_entity
 
-
-def create_enemy_square(world: esper.World, pos: pygame.Vector2, enemy_info: dict):
+def create_enemy_square(world: esper.World, pos: pygame.Vector2, enemy_info: dict, movement_vel: int):
     enemy_surface = ServiceLocator.images_service.get(enemy_info["image"])
     size = enemy_surface.get_size()
     size = (size[0] / enemy_info["animations"]["number_frames"], size[1])
     position = pygame.Vector2(pos[0] - (size[0] / 2),  pos[1] - (size[1] / 2))
-    vel = pygame.Vector2(0,0)
+    vel = pygame.Vector2(movement_vel,0)
     enemy_entity = create_sprite(world, position, vel, enemy_surface)
     world.add_component(enemy_entity, CAnimation(enemy_info["animations"]))
     world.add_component(enemy_entity, CTagEnemy())
@@ -50,7 +49,7 @@ def create_level(ecs_world:esper.World, enemies_data:dict, level_data:dict, wind
         for i in range(level_data[row]["count"]):
             if( i % 2 == 0 and i !=0):
                 x_mod += 16
-            create_enemy_square(ecs_world,pygame.Vector2(midle_point + x_mod,j),enemies_data[level_data[row]["enemy_type"]])
+            create_enemy_square(ecs_world,pygame.Vector2(midle_point + x_mod,j),enemies_data[level_data[row]["enemy_type"]], enemies_data["movement_velocity"])
             x_mod *= -1
         j -= 12
 
