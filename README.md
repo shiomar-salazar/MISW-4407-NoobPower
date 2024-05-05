@@ -29,7 +29,9 @@ MISW-4407-NoobPower
 │  │  ├─ bullet.json
 │  │  ├─ enemies.json
 │  │  ├─ enemy_field.json
+│  │  ├─ explosion.json
 │  │  ├─ interface.json
+│  │  ├─ player.json
 │  │  ├─ starfield.json
 │  │  └─ window.json
 │  ├─ fnt
@@ -71,17 +73,27 @@ MISW-4407-NoobPower
    │  ├─ components
    │  │  ├─ c_animation.py
    │  │  ├─ c_input_command.py
+   │  │  ├─ c_reload.py
    │  │  ├─ c_surface.py
    │  │  ├─ c_transform.py
    │  │  ├─ c_velocity.py
    │  │  ├─ tags
+   │  │  │  ├─ c_tag_bullet.py
    │  │  │  ├─ c_tag_enemy.py
+   │  │  │  ├─ c_tag_enemy_bullet.py
+   │  │  │  ├─ c_tag_explosion.py
+   │  │  │  ├─ c_tag_player.py
    │  │  │  └─ c_tag_player_bullet.py
    │  │  └─ __init__.py
    │  ├─ systems
    │  │  ├─ s_animation.py
+   │  │  ├─ s_collision_enemy_bullet.py
+   │  │  ├─ s_enemy_block_movement.py
+   │  │  ├─ s_enemy_fire.py
+   │  │  ├─ s_explosion_kill.py
    │  │  ├─ s_input_player.py
    │  │  ├─ s_movement.py
+   │  │  ├─ s_player_limits.py
    │  │  ├─ s_rendering.py
    │  │  ├─ s_screen_bounce.py
    │  │  ├─ s_screen_bullet.py

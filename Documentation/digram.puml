@@ -1,14 +1,12 @@
 @startuml
 entity Enemy
 entity Player_Bullet
+entity Input_Left
+entity Input_Right
 entity Input_Fire
-/'
 entity Player
-entity Enemy_Bullet
 entity Explotion
-entity Player_Input
-'/
-
+entity Enemy_Bullet
 
 class CSurface {
     Color : Pygame.Vector2
@@ -40,23 +38,12 @@ class CommandPhase {
     Enum
 }
 
-/'
-class CPlayerState {
-    state : PlayerState
-}
-class PlayerState {
-    Enum
-}
-'/
-
 class CTagEnemy
-
-/'
-class CTagBullet_Player
-class CTagBullet_Enemy
-class CTagExplotion
+class CTagBullet
+class CTagExplosion
 class CTagPlayer
-'/
+class CTagEnemyBullet
+class CTagPlayerBullet
 
 stereotype system_animation
 stereotype system_movement
@@ -64,32 +51,67 @@ stereotype system_rendering
 stereotype system_screen_bounce
 stereotype system_screen_bullet
 stereotype system_input_player
-/'
 stereotype system_collision_enemy_bullet
-stereotype system_collision_player_enemy
+stereotype system_enemy_block_movement
 stereotype system_explosion_kill
-stereotype system_player_state
-stereotype system_screen_player
-'/
+stereotype system_enemy_fire
+stereotype system_player_limits
 
 CAnimation <|-- AnimationData
 CInputCommnad <|-- CommandPhase
-/'
-CPlayerState <|-- PlayerState
-'/
 
 Enemy *-- CTagEnemy
 Enemy *-- CAnimation
 Enemy *-- CSurface
 Enemy *-- CTransform
 Enemy *-- CVelocity
+system_enemy_block_movement --* Enemy : Modify
 
-Player_Bullet *-- CTagBullet_Player
+Player_Bullet *-- CTagPlayerBullet
 Player_Bullet *-- CSurface
 Player_Bullet *-- CTransform
 Player_Bullet *-- CVelocity
+system_screen_bullet --* Player_Bullet : Delete
 
 Input_Fire *-- CInputCommnad
+Input_Left *-- CInputCommnad
+Input_Right *-- CInputCommnad
+system_input_player --* Input_Fire : Invoke
+system_input_player --* Input_Left : Invoke
+system_input_player --* Input_Right : Invoke
+
+system_collision_enemy_bullet --* Explotion : Create
+Explotion *-- CTagExplosion
+Explotion *-- CAnimation
+Explotion *-- system_explosion_kill :Delete
+
+Player *-- CTagPlayer
+Player *-- CSurface
+Player *-- CTransform
+Player *-- CVelocity
+system_player_limits --* Player : Modify
+
+system_enemy_fire --* Enemy_Bullet : Create
+Enemy_Bullet *-- CTagEnemyBullet
+Enemy_Bullet *-- CTagBullet
+Enemy_Bullet *-- CSurface
+Enemy_Bullet *-- CTransform
+Enemy_Bullet *-- CVelocity
+system_screen_bullet --* Enemy_Bullet : Delete
+
+system_animation --* CAnimation
+system_animation --* CSurface
+
+system_movement --* CTransform
+system_movement --* CVelocity
+
+system_rendering --* CTransform
+system_rendering --* CSurface
+
+system_screen_bounce --* CTransform
+system_screen_bounce --*CVelocity
+system_screen_bounce --* CSurface
+system_screen_bounce --* CTagEnemy : Ignore
 
 
 @enduml
