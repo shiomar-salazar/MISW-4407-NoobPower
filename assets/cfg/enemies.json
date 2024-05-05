@@ -1,5 +1,6 @@
 {
   "movement_velocity": 5,
+  "reload_time": 5,
   "EnemyA": {
     "image": "assets/img/invaders_enemy_01.png",
     "animations": {

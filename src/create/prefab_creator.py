@@ -4,10 +4,13 @@ import pygame
 
 from src.ecs.components.c_animation import CAnimation
 from src.ecs.components.c_input_command import CInputCommand
+from src.ecs.components.c_reload import CReload
 from src.ecs.components.c_surface import CSurface
 from src.ecs.components.c_transform import CTransform
 from src.ecs.components.c_velocity import CVelocity
+from src.ecs.components.tags.c_tag_bullet import CTagBullet
 from src.ecs.components.tags.c_tag_enemy import CTagEnemy
+from src.ecs.components.tags.c_tag_enemy_bullet import CTagEnemyBullet
 from src.ecs.components.tags.c_tag_explosion import CTagExplosion
 from src.ecs.components.tags.c_tag_player import CTagPlayer
 from src.ecs.components.tags.c_tag_player_bullet import CTagPlayerBullet
@@ -28,7 +31,7 @@ def create_sprite(world: esper.World, pos: pygame.Vector2, vel: pygame.Vector2, 
     world.add_component(sprite_entity, CSurface.from_surface(surface))
     return sprite_entity
 
-def create_enemy_square(world: esper.World, pos: pygame.Vector2, enemy_info: dict, movement_vel: int):
+def create_enemy_square(world: esper.World, pos: pygame.Vector2, enemy_info: dict, movement_vel: int, reload_time: int):
     enemy_surface = ServiceLocator.images_service.get(enemy_info["image"])
     size = enemy_surface.get_size()
     size = (size[0] / enemy_info["animations"]["number_frames"], size[1])
@@ -37,6 +40,7 @@ def create_enemy_square(world: esper.World, pos: pygame.Vector2, enemy_info: dic
     enemy_entity = create_sprite(world, position, vel, enemy_surface)
     world.add_component(enemy_entity, CAnimation(enemy_info["animations"]))
     world.add_component(enemy_entity, CTagEnemy())
+    world.add_component(enemy_entity, CReload(reload_time)) #* Tiempo de recarga para que un mismo enemigo no dispare dos veces seguidas
 
 def create_level(ecs_world:esper.World, enemies_data:dict, level_data:dict, window_data:dict):
     midle_point = window_data["size"]["w"] / 2
@@ -49,7 +53,7 @@ def create_level(ecs_world:esper.World, enemies_data:dict, level_data:dict, wind
         for i in range(level_data[row]["count"]):
             if( i % 2 == 0 and i !=0):
                 x_mod += 16
-            create_enemy_square(ecs_world,pygame.Vector2(midle_point + x_mod,j),enemies_data[level_data[row]["enemy_type"]], enemies_data["movement_velocity"])
+            create_enemy_square(ecs_world,pygame.Vector2(midle_point + x_mod,j),enemies_data[level_data[row]["enemy_type"]], enemies_data["movement_velocity"], enemies_data["reload_time"])
             x_mod *= -1
         j -= 12
 
@@ -71,7 +75,18 @@ def create_bullet(world: esper.World, player_pos: pygame.Vector2,
 
     bullet_entity = create_square(world, size, pos, vel, color)
     world.add_component(bullet_entity, CTagPlayerBullet())
+    world.add_component(bullet_entity, CTagBullet())
     ServiceLocator.sounds_service.play(bullet_info["sound"])
+
+def create_enemy_bullet(world: esper.World, enemy_pos: pygame.Vector2, bullet_info: dict):
+    size = pygame.Vector2(bullet_info["size"]["x"], bullet_info["size"]["y"])
+    color = pygame.Color(bullet_info["color"]["r"], bullet_info["color"]["g"], bullet_info["color"]["b"])
+    pos = pos = pygame.Vector2(enemy_pos.x, enemy_pos.y)
+    vel = pygame.Vector2(0, bullet_info["enemy_bullet"]["velocity"])
+
+    enemy_bullet_entity = create_square(world, size, pos, vel, color)
+    world.add_component(enemy_bullet_entity, CTagEnemyBullet())
+    world.add_component(enemy_bullet_entity, CTagBullet())
 
 def create_player(world:esper.World, player_info:dict, screen:pygame.Surface):
     player_surface = ServiceLocator.images_service.get(player_info["image"])
