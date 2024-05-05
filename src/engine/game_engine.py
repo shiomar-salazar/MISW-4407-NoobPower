@@ -1,5 +1,6 @@
 import asyncio
 import json
+import random
 import pygame
 import esper
 
@@ -52,6 +53,8 @@ class GameEngine:
             self.player_cfg = json.load(player_file)
         with open("assets/cfg/explosion.json", encoding="utf-8") as explosion_file:
             self.explosion_cfg = json.load(explosion_file)
+        with open("assets/cfg/starfield.json", encoding="utf-8") as starfield_file:
+            self.starfield_cfg = json.load(starfield_file)
 
     async def run(self) -> None:
         self._create()
@@ -98,6 +101,7 @@ class GameEngine:
     def _draw(self):
         self.screen.fill(self.bg_color)
         system_rendering(self.ecs_world, self.screen)
+        #self._draw_stars()
         pygame.display.flip()
 
     def _clean(self):
@@ -123,3 +127,23 @@ class GameEngine:
                    
             elif c_input.phase == CommandPhase.END:
                     self.player_c_v.vel.x -= self.player_cfg['input_velocity']
+
+    def _draw_stars(self):
+        max_stars_on_screen = self.starfield_cfg["number_of_stars"]
+        stars_on_screen = 0
+        for _ in range(self.starfield_cfg["number_of_stars"]):
+            if stars_on_screen >= max_stars_on_screen:
+                break
+            x = random.randint(0, self.window_cfg["size"]["w"])
+            y = random.randint(0, self.window_cfg["size"]["h"])
+            star_color = random.choice(self.starfield_cfg["star_colors"])
+            color = pygame.Color(star_color["r"], star_color["g"], star_color["b"])
+            pygame.draw.circle(self.screen, color, (x, y), 1)
+
+            if random.random() < self.starfield_cfg["blink_rate"]["min"]:
+                pygame.draw.circle(self.screen, self.bg_color, (x, y), 1)
+            
+            y_speed = random.uniform(self.starfield_cfg["vertical_speed"]["min"], self.starfield_cfg["vertical_speed"]["max"])
+            y += y_speed * self.delta_time
+            
+            stars_on_screen += 1
