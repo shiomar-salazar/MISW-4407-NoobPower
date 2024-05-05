@@ -1,10 +1,11 @@
 import asyncio
 import json
 import random
+import time
 import pygame
 import esper
 
-from src.create.prefab_creator import create_bullet, create_input_player, create_level, create_player
+from src.create.prefab_creator import create_bullet, create_input_player, create_level, create_player, create_stars
 from src.ecs.components.c_input_command import CInputCommand, CommandPhase
 from src.ecs.components.c_surface import CSurface
 from src.ecs.components.c_transform import CTransform
@@ -21,6 +22,7 @@ from src.ecs.systems.s_player_limits import system_player_limits
 from src.ecs.systems.s_rendering import system_rendering
 from src.ecs.systems.s_screen_bounce import system_screen_bounce
 from src.ecs.systems.s_screen_bullet import system_screen_bullet
+from src.ecs.systems.s_starfield import system_starfield
 
 class GameEngine:
     def __init__(self) -> None:
@@ -75,6 +77,7 @@ class GameEngine:
         self.player_c_s = self.ecs_world.component_for_entity(self.player_entity, CSurface)
         create_level(self.ecs_world, self.enemies_cfg, self.level_cfg, self.window_cfg)
         create_input_player(self.ecs_world)
+        create_stars(self.ecs_world, self.starfield_cfg, self.window_cfg)
 
     def _calculate_time(self):
         self.clock.tick(self.framerate)
@@ -87,6 +90,7 @@ class GameEngine:
                 self.is_running = False
 
     def _update(self):
+        system_starfield(self.ecs_world, self.delta_time, self.starfield_cfg, self.window_cfg)
         system_movement(self.ecs_world, self.delta_time)
         system_enemy_block_movement(self.ecs_world, self.delta_time, self.window_cfg["size"]["w"])
         system_enemy_fire(self.ecs_world, self.delta_time, self.bullet_cfg)
@@ -103,7 +107,6 @@ class GameEngine:
     def _draw(self):
         self.screen.fill(self.bg_color)
         system_rendering(self.ecs_world, self.screen)
-        #self._draw_stars()
         pygame.display.flip()
 
     def _clean(self):
@@ -130,22 +133,6 @@ class GameEngine:
             elif c_input.phase == CommandPhase.END:
                     self.player_c_v.vel.x -= self.player_cfg['input_velocity']
 
-    def _draw_stars(self):
-        max_stars_on_screen = self.starfield_cfg["number_of_stars"]
-        stars_on_screen = 0
-        for _ in range(self.starfield_cfg["number_of_stars"]):
-            if stars_on_screen >= max_stars_on_screen:
-                break
-            x = random.randint(0, self.window_cfg["size"]["w"])
-            y = random.randint(0, self.window_cfg["size"]["h"])
-            star_color = random.choice(self.starfield_cfg["star_colors"])
-            color = pygame.Color(star_color["r"], star_color["g"], star_color["b"])
-            pygame.draw.circle(self.screen, color, (x, y), 1)
+    
 
-            if random.random() < self.starfield_cfg["blink_rate"]["min"]:
-                pygame.draw.circle(self.screen, self.bg_color, (x, y), 1)
-            
-            y_speed = random.uniform(self.starfield_cfg["vertical_speed"]["min"], self.starfield_cfg["vertical_speed"]["max"])
-            y += y_speed * self.delta_time
-            
-            stars_on_screen += 1
+
