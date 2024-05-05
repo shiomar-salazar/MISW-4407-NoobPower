@@ -12,7 +12,7 @@ def system_enemy_block_movement(world: esper.World, delta_time: float, screen_wi
             #* En min_x dividí por 3 porque encontré que así rebotaba a la misma distancia a la izquierda y derecha, pero no tengo una justificación clara, se podría revisar.
             min_x = min(min_x, c_transform.pos.x - c_surface.surf.get_width() / 3)
             max_x = max(max_x, c_transform.pos.x + c_surface.surf.get_width() / 2)
-            print(screen_width, max_x, max_x > screen_width)
+            #print(screen_width, max_x, max_x > screen_width)
 
     if min_x < 0 or max_x > screen_width:
         for entity, (_, c_velocity) in world.get_components(CTransform, CVelocity):
