@@ -72,20 +72,18 @@ def create_bullet(world: esper.World, player_pos: pygame.Vector2,
     
     size = pygame.Vector2(bullet_info["size"]["x"], bullet_info["size"]["y"])
     color = pygame.Color(bullet_info["color"]["r"], bullet_info["color"]["g"], bullet_info["color"]["b"])
-    pos = pygame.Vector2(player_pos.x + player_size[0] / 2, player_pos.y + player_size[1] / 2)
-    vel = pygame.Vector2(0, bullet_info["velocity"]*-1)
-
+    pos = pygame.Vector2(player_pos.x + player_size[0] / 2 - 1 , player_pos.y - size.y + 1)
+    vel = pygame.Vector2(0,0)
     bullet_entity = create_square(world, size, pos, vel, color)
     world.add_component(bullet_entity, CTagPlayerBullet())
     world.add_component(bullet_entity, CTagBullet())
-    ServiceLocator.sounds_service.play(bullet_info["sound"])
+    return bullet_entity
 
 def create_enemy_bullet(world: esper.World, enemy_pos: pygame.Vector2, bullet_info: dict):
     size = pygame.Vector2(bullet_info["size"]["x"], bullet_info["size"]["y"])
     color = pygame.Color(bullet_info["color"]["r"], bullet_info["color"]["g"], bullet_info["color"]["b"])
     pos = pos = pygame.Vector2(enemy_pos.x, enemy_pos.y)
     vel = pygame.Vector2(0, bullet_info["enemy_bullet"]["velocity"])
-
     enemy_bullet_entity = create_square(world, size, pos, vel, color)
     world.add_component(enemy_bullet_entity, CTagEnemyBullet())
     world.add_component(enemy_bullet_entity, CTagBullet())
