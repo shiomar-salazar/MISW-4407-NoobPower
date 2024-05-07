@@ -48,7 +48,6 @@ class CTagPlayerBullet
 stereotype system_animation
 stereotype system_movement
 stereotype system_rendering
-stereotype system_screen_bounce
 stereotype system_screen_bullet
 stereotype system_input_player
 stereotype system_collision_enemy_bullet
@@ -107,11 +106,5 @@ system_movement --* CVelocity
 
 system_rendering --* CTransform
 system_rendering --* CSurface
-
-system_screen_bounce --* CTransform
-system_screen_bounce --*CVelocity
-system_screen_bounce --* CSurface
-system_screen_bounce --* CTagEnemy : Ignore
-
 
 @enduml

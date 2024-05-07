@@ -4,13 +4,12 @@ import pygame
 
 from src.ecs.components.c_input_command import CInputCommand
 from src.engine.scenes.scene import Scene
+from src.engine.service_locator import ServiceLocator
 from src.game.play_scene import PlayScene
 
 class GameEngine:
     def __init__(self) -> None:
-        with open("assets/cfg/window.json", encoding="utf-8") as window_file:
-            self._window_cfg = json.load(window_file)
-
+        self._window_cfg = ServiceLocator.configurations_service.get("assets/cfg/window.json")
         pygame.init()
         pygame.display.set_caption(self._window_cfg["title"])
         self.screen = pygame.display.set_mode(
@@ -26,7 +25,7 @@ class GameEngine:
         self.is_running = False
 
         self._scenes:dict[str, Scene] = {}
-        self._scenes["PLAY_GAME"] = PlayScene("assets/cfg/enemy_field.json", self)
+        self._scenes["PLAY_GAME"] = PlayScene(engine=self, screen_surf=self.screen)
         self._current_scene:Scene = None
         self._scene_name_to_switch:str = None
 
