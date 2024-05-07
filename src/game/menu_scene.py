@@ -2,6 +2,7 @@ import pygame
 
 from src.create.prefab_creator import create_sprite
 from src.create.prefab_creator_interface import TextAlignment, create_text
+from src.ecs.systems.s_moving_text import system_moving_text
 from src.engine.scenes.scene import Scene
 from src.ecs.components.c_input_command import CInputCommand
 from src.engine.service_locator import ServiceLocator 
@@ -9,11 +10,8 @@ from src.engine.service_locator import ServiceLocator
 class MenuScene(Scene):
     def do_create(self):
         self._interface_cfg = ServiceLocator.configurations_service.get("assets/cfg/menu_screen.json")
-
-        surface = ServiceLocator.images_service.get(self._interface_cfg["logo"]["image"])
-        position = pygame.Vector2(self._interface_cfg["logo"]["position"]["x"] - surface.get_size()[0] / 2, self._interface_cfg["logo"]["position"]["y"])
-        velocity = pygame.Vector2(0,0)
-        create_sprite( self.ecs_world, position, velocity, surface)
+        self._window_cfg = ServiceLocator.configurations_service.get("assets/cfg/window.json")
+        screen_height = self._window_cfg["size"]["h"]
 
         create_text(self.ecs_world, self._interface_cfg["1up"]["text"], 
                     self._interface_cfg["start"]["size"],  
@@ -21,7 +19,7 @@ class MenuScene(Scene):
                                  self._interface_cfg["1up"]["color"]["g"], 
                                  self._interface_cfg["1up"]["color"]["b"]), 
                     pygame.Vector2(self._interface_cfg["1up"]["position"]["x"], 
-                                    self._interface_cfg["1up"]["position"]["y"]), 
+                                    self._interface_cfg["1up"]["position"]["y"] + screen_height), 
                     TextAlignment.CENTER)
         create_text(self.ecs_world, self._interface_cfg["00"]["text"], 
                     self._interface_cfg["start"]["size"],  
@@ -29,7 +27,7 @@ class MenuScene(Scene):
                                  self._interface_cfg["00"]["color"]["g"], 
                                  self._interface_cfg["00"]["color"]["b"]), 
                     pygame.Vector2(self._interface_cfg["00"]["position"]["x"], 
-                                    self._interface_cfg["00"]["position"]["y"]), 
+                                    self._interface_cfg["00"]["position"]["y"] + screen_height), 
                     TextAlignment.CENTER)
         create_text(self.ecs_world, self._interface_cfg["hi_score"]["text"], 
                     self._interface_cfg["start"]["size"],  
@@ -37,7 +35,7 @@ class MenuScene(Scene):
                                  self._interface_cfg["hi_score"]["color"]["g"], 
                                  self._interface_cfg["hi_score"]["color"]["b"]), 
                     pygame.Vector2(self._interface_cfg["hi_score"]["position"]["x"], 
-                                    self._interface_cfg["hi_score"]["position"]["y"]), 
+                                    self._interface_cfg["hi_score"]["position"]["y"] + screen_height), 
                     TextAlignment.CENTER)
         create_text(self.ecs_world, self._interface_cfg["hi_score_value"]["text"], 
                     self._interface_cfg["start"]["size"],  
@@ -45,7 +43,7 @@ class MenuScene(Scene):
                                  self._interface_cfg["hi_score_value"]["color"]["g"], 
                                  self._interface_cfg["hi_score_value"]["color"]["b"]), 
                     pygame.Vector2(self._interface_cfg["hi_score_value"]["position"]["x"], 
-                                    self._interface_cfg["hi_score_value"]["position"]["y"]), 
+                                    self._interface_cfg["hi_score_value"]["position"]["y"] + screen_height), 
                     TextAlignment.CENTER)
         create_text(self.ecs_world, self._interface_cfg["start"]["text"], 
                     self._interface_cfg["start"]["size"], 
@@ -53,8 +51,14 @@ class MenuScene(Scene):
                                  self._interface_cfg["start"]["color"]["g"], 
                                  self._interface_cfg["start"]["color"]["b"]), 
                     pygame.Vector2(self._interface_cfg["start"]["position"]["x"], 
-                                    self._interface_cfg["start"]["position"]["y"]), 
+                                    self._interface_cfg["start"]["position"]["y"] + screen_height), 
                     TextAlignment.CENTER)
+        
+        surface = ServiceLocator.images_service.get(self._interface_cfg["logo"]["image"])
+        position = pygame.Vector2(self._interface_cfg["logo"]["position"]["x"] - surface.get_size()[0] / 2, 
+                                  self._interface_cfg["logo"]["position"]["y"] + screen_height)
+        velocity = pygame.Vector2(0,0)
+        create_sprite( self.ecs_world, position, velocity, surface)
         
         start_game_action = self.ecs_world.create_entity()
         self.ecs_world.add_component(start_game_action,
@@ -63,3 +67,6 @@ class MenuScene(Scene):
     def do_action(self, action: CInputCommand):
         if action.name == "START_GAME":
             self.switch_scene("PLAY_GAME")
+
+    def do_update(self, delta_time: float):
+        system_moving_text(self.ecs_world, delta_time)

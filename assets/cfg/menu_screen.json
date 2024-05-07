@@ -3,7 +3,7 @@
         "image": "assets/img/invaders_logo_title.png",
         "position": {
             "x": 128,
-            "y": 60
+            "y": 70
         }
     },
     "1up": {
@@ -49,9 +49,9 @@
         "text": "5000",
         "size": 8,
         "color":{
-            "r": 37,
-            "g": 150,
-            "b": 190
+            "r": 30,
+            "g": 144,
+            "b": 255
         },
         "position": {
             "x": 128,
