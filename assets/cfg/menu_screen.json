@@ -1,0 +1,74 @@
+{
+    "logo": {
+        "image": "assets/img/invaders_logo_title.png",
+        "position": {
+            "x": 128,
+            "y": 70
+        }
+    },
+    "1up": {
+        "text": "1UP",
+        "size": 8,
+        "color":{
+            "r": 255,
+            "g": 0,
+            "b": 0
+        },
+        "position": {
+            "x": 25,
+            "y": 25
+        }
+    },
+    "00": {
+        "text": "00",
+        "size": 8,
+        "color":{
+            "r": 255,
+            "g": 255,
+            "b": 255
+        },
+        "position": {
+            "x": 45,
+            "y": 35
+        }
+    },
+    "hi_score": {
+        "text": "HI-SCORE",
+        "size": 8,
+        "color":{
+            "r": 255,
+            "g": 0,
+            "b": 0
+        },
+        "position": {
+            "x": 120,
+            "y": 25
+        }
+    },
+    "hi_score_value": {
+        "text": "5000",
+        "size": 8,
+        "color":{
+            "r": 30,
+            "g": 144,
+            "b": 255
+        },
+        "position": {
+            "x": 128,
+            "y": 35
+        }
+    },
+    "start": {
+            "text": "PRESS Z TO START",
+            "size": 8,
+            "color":{
+                "r": 255,
+                "g": 0,
+                "b": 0
+            },
+            "position": {
+                "x": 128,
+                "y": 170
+            }
+    }
+}

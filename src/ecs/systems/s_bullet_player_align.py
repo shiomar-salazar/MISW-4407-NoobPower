@@ -1,13 +1,19 @@
 import esper
+from src.create.prefab_creator import create_bullet
 from src.ecs.components.c_surface import CSurface
 from src.ecs.components.c_transform import CTransform
 from src.ecs.components.c_velocity import CVelocity
+from src.ecs.components.tags.c_tag_player import CTagPlayer
+from src.ecs.components.tags.c_tag_player_bullet import CTagPlayerBullet
 
-def system_bullet_player_align(world:esper.World, player_ent:int, bullet_ent:int):
-    player_c_t = world.component_for_entity(player_ent, CTransform)
-    player_c_s = world.component_for_entity(player_ent, CSurface)
-    bullet_c_t = world.component_for_entity(bullet_ent, CTransform)
-    bullet_c_v = world.component_for_entity(bullet_ent, CVelocity)
+def system_bullet_player_align(world:esper.World, bullet_cfg:dict):
 
-    if bullet_c_v.vel.y == 0:
-        bullet_c_t.pos.x = player_c_t.pos.x + player_c_s.area.size[0] / 2 - 1
+    player_components = world.get_components(CSurface, CTransform, CTagPlayer)
+    bullet_components = world.get_components(CVelocity, CTransform, CSurface, CTagPlayerBullet)
+
+    for _, (c_p_s,c_p_t,_) in player_components:
+        for _, (c_v,c_t,c_s, _) in bullet_components:
+            if c_v.vel.y == 0:
+                c_t.pos.x = c_p_t.pos.x + c_p_s.area.size[0] / 2
+        if(len(bullet_components) == 0):
+            create_bullet(world, c_p_t.pos, c_p_s.area.size, bullet_cfg) 
