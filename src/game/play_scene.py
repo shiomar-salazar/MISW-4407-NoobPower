@@ -9,6 +9,7 @@ from src.ecs.components.c_transform import CTransform
 from src.ecs.components.c_velocity import CVelocity
 from src.ecs.components.tags.c_tag_player_bullet import CTagPlayerBullet
 from src.ecs.systems.s_animation import system_animation
+from src.ecs.systems.s_bullet_player_align import system_bullet_player_align
 from src.ecs.systems.s_collision_enemy_bullet import system_collision_enemy_bullet
 from src.ecs.systems.s_enemy_block_movement import system_enemy_block_movement
 from src.ecs.systems.s_enemy_fire import system_enemy_fire
@@ -43,6 +44,12 @@ class PlayScene(Scene):
         create_stars(self.ecs_world, self.starfield_cfg, self.window_cfg)
 
     def do_update(self, delta_time: float):
+        if( len(self.ecs_world.get_component(CTagPlayerBullet)) == 0):
+            self._player_bullet = create_bullet(self.ecs_world, self.player_c_t.pos, self.player_c_s.area.size, self.bullet_cfg)
+            self._player_bullet_c_v = self.ecs_world.component_for_entity(self._player_bullet, CVelocity)
+        else:
+             system_bullet_player_align(self.ecs_world, self.player_entity,self._player_bullet)
+           
         system_starfield(self.ecs_world, delta_time, self.starfield_cfg, self.window_cfg)
         system_movement(self.ecs_world, delta_time)
         system_enemy_block_movement(self.ecs_world, delta_time, self.window_cfg["size"]["w"])
@@ -53,14 +60,13 @@ class PlayScene(Scene):
         system_explosion_kill(self.ecs_world)
         system_animation(self.ecs_world, delta_time)
         self.ecs_world._clear_dead_entities()
-        self.player_bullets = len(self.ecs_world.get_component(CTagPlayerBullet))
         
     def do_action(self, action: CInputCommand):
-        if action.name == "PLAYER_FIRE" and action.phase == CommandPhase.START and self.player_bullets == 0:
-            create_bullet(self.ecs_world, self.player_c_t.pos,
-                          self.player_c_s.area.size, self.bullet_cfg)
+        if action.name == "PLAYER_FIRE" and action.phase == CommandPhase.START:
+            self._player_bullet_c_v.vel.y = self.bullet_cfg["velocity"]*-1
+            ServiceLocator.sounds_service.play(self.bullet_cfg["sound"])
         #Input de movimiento del jugador
-        elif action.name == 'PLAYER_LEFT':
+        if action.name == 'PLAYER_LEFT':
             if action.phase == CommandPhase.START:
                 self.player_c_v.vel.x -= self.player_cfg['input_velocity']
                 
@@ -70,6 +76,6 @@ class PlayScene(Scene):
         elif action.name == 'PLAYER_RIGHT':
             if action.phase == CommandPhase.START:
                     self.player_c_v.vel.x += self.player_cfg['input_velocity']
-                   
+
             elif action.phase == CommandPhase.END:
                     self.player_c_v.vel.x -= self.player_cfg['input_velocity']
