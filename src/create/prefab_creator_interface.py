@@ -2,6 +2,7 @@ from enum import Enum
 import pygame
 import esper
 
+from src.ecs.components.c_blinking import CBlinking
 from src.ecs.components.c_surface import CSurface
 from src.ecs.components.c_transform import CTransform
 from src.engine.service_locator import ServiceLocator
@@ -12,7 +13,7 @@ class TextAlignment(Enum):
     CENTER = 2
 
 def create_text(world:esper.World, txt:str, size:int, 
-                color:pygame.Color, pos:pygame.Vector2, alignment:TextAlignment) -> int:
+                color:pygame.Color, pos:pygame.Vector2, alignment:TextAlignment, isBlinking:bool = False) -> int:
     font = ServiceLocator.fonts_service.get("assets/fnt/PressStart2P.ttf", size)
     text_entity = world.create_entity()
 
@@ -26,6 +27,7 @@ def create_text(world:esper.World, txt:str, size:int,
     elif alignment is TextAlignment.CENTER:
         origin.x -= txt_s.area.centerx
 
-    world.add_component(text_entity,
-                        CTransform(pos + origin))
+    world.add_component(text_entity,CTransform(pos + origin))
+    if isBlinking:
+        world.add_component(text_entity,CBlinking())
     return text_entity

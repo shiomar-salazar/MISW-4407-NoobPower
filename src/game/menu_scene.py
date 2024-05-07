@@ -2,6 +2,8 @@ import pygame
 
 from src.create.prefab_creator import create_sprite
 from src.create.prefab_creator_interface import TextAlignment, create_text
+from src.ecs.components.c_blinking import CBlinking
+from src.ecs.systems.s_blinking_text import system_blinking_text
 from src.ecs.systems.s_moving_text import system_moving_text
 from src.engine.scenes.scene import Scene
 from src.ecs.components.c_input_command import CInputCommand
@@ -52,7 +54,7 @@ class MenuScene(Scene):
                                  self._interface_cfg["start"]["color"]["b"]), 
                     pygame.Vector2(self._interface_cfg["start"]["position"]["x"], 
                                     self._interface_cfg["start"]["position"]["y"] + screen_height), 
-                    TextAlignment.CENTER)
+                    TextAlignment.CENTER, isBlinking=True)
         
         surface = ServiceLocator.images_service.get(self._interface_cfg["logo"]["image"])
         position = pygame.Vector2(self._interface_cfg["logo"]["position"]["x"] - surface.get_size()[0] / 2, 
@@ -70,3 +72,4 @@ class MenuScene(Scene):
 
     def do_update(self, delta_time: float):
         system_moving_text(self.ecs_world, delta_time)
+        system_blinking_text(self.ecs_world, delta_time)
