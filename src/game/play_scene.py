@@ -11,6 +11,7 @@ from src.ecs.systems.s_animation import system_animation
 from src.ecs.systems.s_bullet_player_align import system_bullet_player_align
 from src.ecs.systems.s_bullet_shoot import system_bullet_shoot
 from src.ecs.systems.s_collision_enemy_bullet import system_collision_enemy_bullet
+from src.ecs.systems.s_collision_player_bullet import system_collision_player_bullet
 from src.ecs.systems.s_enemy_block_movement import system_enemy_block_movement
 from src.ecs.systems.s_enemy_fire import system_enemy_fire
 from src.ecs.systems.s_explosion_kill import system_explosion_kill
@@ -47,6 +48,7 @@ class PlayScene(Scene):
         system_screen_bullet(self.ecs_world, self._screen_surf)
         system_player_limits(self.ecs_world, self._screen_surf)
         system_collision_enemy_bullet(self.ecs_world, self.explosion_cfg["enemy_explosion"])
+        system_collision_player_bullet(self.ecs_world, self.explosion_cfg["player_explosion"])
         system_explosion_kill(self.ecs_world)
         system_bullet_player_align(self.ecs_world, self.bullet_cfg)
         system_animation(self.ecs_world, delta_time)
