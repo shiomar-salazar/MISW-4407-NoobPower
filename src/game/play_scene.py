@@ -2,7 +2,9 @@ import json
 
 import pygame
 
+import src
 from src.create.prefab_creator import create_input_player, create_level, create_player
+from src.create.prefab_creator_interface import TextAlignment, create_text
 from src.ecs.components.c_input_command import CInputCommand, CommandPhase
 from src.ecs.components.c_surface import CSurface
 from src.ecs.components.c_transform import CTransform
@@ -31,7 +33,10 @@ class PlayScene(Scene):
         self.bullet_cfg = ServiceLocator.configurations_service.get("assets/cfg/bullet.json")
         self.player_cfg = ServiceLocator.configurations_service.get("assets/cfg/player.json")
         self.explosion_cfg = ServiceLocator.configurations_service.get("assets/cfg/explosion.json")
+        self.pause_cfg = ServiceLocator.configurations_service.get("assets/cfg/pause.json")
         self._screen_surf = screen_surf
+        self.is_paused = False
+        self.pause_text = None
 
     def do_create(self):
         self.player_entity = create_player(self.ecs_world, self.player_cfg, self._screen_surf)
@@ -41,18 +46,19 @@ class PlayScene(Scene):
         create_level(self.ecs_world, self.enemies_cfg, self.level_cfg, self.window_cfg)
         create_input_player(self.ecs_world)
 
-    def do_update(self, delta_time: float):         
-        system_movement(self.ecs_world, delta_time)
-        system_enemy_block_movement(self.ecs_world, delta_time, self.window_cfg["size"]["w"])
-        system_enemy_fire(self.ecs_world, delta_time, self.bullet_cfg)
-        system_screen_bullet(self.ecs_world, self._screen_surf)
-        system_player_limits(self.ecs_world, self._screen_surf)
-        system_collision_enemy_bullet(self.ecs_world, self.explosion_cfg["enemy_explosion"])
-        system_collision_player_bullet(self.ecs_world, self.explosion_cfg["player_explosion"])
-        system_explosion_kill(self.ecs_world)
-        system_bullet_player_align(self.ecs_world, self.bullet_cfg)
-        system_animation(self.ecs_world, delta_time)
-        self.ecs_world._clear_dead_entities()
+    def do_update(self, delta_time: float): 
+        if not self.is_paused:
+            system_movement(self.ecs_world, delta_time)
+            system_enemy_block_movement(self.ecs_world, delta_time, self.window_cfg["size"]["w"])
+            system_enemy_fire(self.ecs_world, delta_time, self.bullet_cfg)
+            system_screen_bullet(self.ecs_world, self._screen_surf)
+            system_player_limits(self.ecs_world, self._screen_surf)
+            system_collision_enemy_bullet(self.ecs_world, self.explosion_cfg["enemy_explosion"])
+            system_collision_player_bullet(self.ecs_world, self.explosion_cfg["player_explosion"])
+            system_explosion_kill(self.ecs_world)
+            system_bullet_player_align(self.ecs_world, self.bullet_cfg)
+            system_animation(self.ecs_world, delta_time)
+            self.ecs_world._clear_dead_entities()
         
     def do_action(self, action: CInputCommand):
         if action.name == "PLAYER_FIRE" and action.phase == CommandPhase.START:
@@ -71,3 +77,28 @@ class PlayScene(Scene):
 
             elif action.phase == CommandPhase.END:
                     self.player_c_v.vel.x -= self.player_cfg['input_velocity']
+        if action.name == 'PAUSE':
+            if self.is_paused and action.phase == CommandPhase.INACTIVE:
+                self.is_paused = False
+                self.ecs_world.delete_entity(self.pause_text)
+                self.ecs_world.delete_entity(self.support_text)
+            elif (not self.is_paused) and action.phase == CommandPhase.ACTIVE:
+                self.is_paused = True
+                self.pause_text = create_text(self.ecs_world, self.pause_cfg["PAUSE"]["text"], 
+                                              self.pause_cfg["PAUSE"]["size"],
+                                              pygame.Color(self.pause_cfg["PAUSE"]["color"]["r"], 
+                                                           self.pause_cfg["PAUSE"]["color"]["g"],
+                                                           self.pause_cfg["PAUSE"]["color"]["b"]),
+                                              pygame.Vector2(self._screen_surf.get_width() // 2, 
+                                              self._screen_surf.get_height() // 2),
+                                              TextAlignment.CENTER, isBlinking=True)
+                self.support_text = create_text(self.ecs_world, self.pause_cfg["SUPPORT"]["text"],
+                                                self.pause_cfg["SUPPORT"]["size"],
+                                                pygame.Color(self.pause_cfg["SUPPORT"]["color"]["r"],
+                                                self.pause_cfg["SUPPORT"]["color"]["g"],
+                                                self.pause_cfg["SUPPORT"]["color"]["b"]),
+                                                pygame.Vector2(self._screen_surf.get_width() // 2,
+                                                self._screen_surf.get_height() // 2 + 10),
+                                                TextAlignment.CENTER)
+
+                

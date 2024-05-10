@@ -12,3 +12,5 @@ class CommandPhase(Enum):
     NA = 0
     START = 1
     END = 2
+    ACTIVE = 3
+    INACTIVE = 4

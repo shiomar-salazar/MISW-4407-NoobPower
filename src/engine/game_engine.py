@@ -3,7 +3,7 @@ import pygame
 
 import esper
 from src.create.prefab_general import create_stars
-from src.ecs.components.c_input_command import CInputCommand
+from src.ecs.components.c_input_command import CInputCommand, CommandPhase
 from src.ecs.systems.s_animation import system_animation
 from src.ecs.systems.s_rendering import system_rendering
 from src.ecs.systems.s_starfield import system_starfield

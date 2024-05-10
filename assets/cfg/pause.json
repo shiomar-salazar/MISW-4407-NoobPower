@@ -1,0 +1,29 @@
+{
+    "PAUSE": {
+    "text": "GAME PAUSED",
+    "size": 8,
+    "color":{
+        "r": 255,
+        "g": 0,
+        "b": 0
+    },
+    "position": {
+        "x": 120,
+        "y": 25
+    }
+},
+
+    "SUPPORT":{
+        "text": "Press 'p' to resume",
+        "size": 8,
+        "color":{
+            "r": 255,
+            "g": 0,
+            "b": 0
+        },
+        "position": {
+            "x": 100,
+            "y": 50
+        }
+    }
+}
