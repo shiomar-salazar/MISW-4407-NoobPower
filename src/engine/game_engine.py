@@ -11,6 +11,7 @@ from src.engine.scenes.scene import Scene
 from src.engine.service_locator import ServiceLocator
 from src.game.menu_scene import MenuScene
 from src.game.play_scene import PlayScene
+from src.game.start_scene import StartScene
 
 class GameEngine:
     def __init__(self) -> None:
@@ -33,6 +34,7 @@ class GameEngine:
 
         self._scenes:dict[str, Scene] = {}
         self._scenes["MENU_SCENE"] = MenuScene(self)
+        self._scenes["START_SCENE"] = StartScene(self)
         self._scenes["PLAY_GAME"] = PlayScene(engine=self, screen_surf=self.screen)
         self._current_scene:Scene = None
         self._scene_name_to_switch:str = None

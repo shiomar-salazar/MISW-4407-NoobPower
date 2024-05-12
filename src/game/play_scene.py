@@ -40,13 +40,13 @@ class PlayScene(Scene):
         self.pause_text = None
 
     def do_create(self):
-        self._interface_cfg = ServiceLocator.configurations_service.get("assets/cfg/menu_screen.json")
+        self._interface_cfg = ServiceLocator.configurations_service.get("assets/cfg/start_screen.json")
         self.player_entity = create_player(self.ecs_world, self.player_cfg, self._screen_surf)
         self.player_c_v = self.ecs_world.component_for_entity(self.player_entity, CVelocity)
         self.player_c_t = self.ecs_world.component_for_entity(self.player_entity, CTransform)
         self.player_c_s = self.ecs_world.component_for_entity(self.player_entity, CSurface)
         create_text(self.ecs_world, self._interface_cfg["00"]["text"], 
-                    self._interface_cfg["start"]["size"],  
+                    self._interface_cfg["00"]["size"],  
                     pygame.Color(self._interface_cfg["00"]["color"]["r"], 
                                  self._interface_cfg["00"]["color"]["g"], 
                                  self._interface_cfg["00"]["color"]["b"]), 
