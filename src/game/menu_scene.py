@@ -68,7 +68,7 @@ class MenuScene(Scene):
 
     def do_action(self, action: CInputCommand):
         if action.name == "START_GAME":
-            self.switch_scene("PLAY_GAME")
+            self.switch_scene("START_SCENE")
 
     def do_update(self, delta_time: float):
         system_moving_text(self.ecs_world, delta_time)
