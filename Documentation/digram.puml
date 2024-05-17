@@ -7,11 +7,15 @@ entity Input_Fire
 entity Player
 entity Explotion
 entity Enemy_Bullet
+entity Star
+entity Text
 
 class CSurface {
     Color : Pygame.Vector2
     Size : Pygame.Vector 2
     from_surface(pygame.Surface)
+    from_text(String, pygame.font.Font, pygame.color)
+    get_area_relative(pygame.Rect, pygame.Rect)
 }
 class CTransform {
     Pos : Pygame.Vector2
@@ -29,7 +33,7 @@ class AnimationData {
     end: Int
     frameRate: Float
 }
-class CInputCommnad {
+class CInputCommand {
     name : Str
     key: inter
     phase : CommandPhase
@@ -38,26 +42,39 @@ class CommandPhase {
     Enum
 }
 
+class CBlinking {
+    actual_time:float
+    alpha:Int
+}
+
 class CTagEnemy
 class CTagBullet
 class CTagExplosion
 class CTagPlayer
 class CTagEnemyBullet
 class CTagPlayerBullet
+class CTagStar
 
 stereotype system_animation
 stereotype system_movement
 stereotype system_rendering
 stereotype system_screen_bullet
-stereotype system_input_player
+stereotype system_input
 stereotype system_collision_enemy_bullet
 stereotype system_enemy_block_movement
 stereotype system_explosion_kill
 stereotype system_enemy_fire
 stereotype system_player_limits
+stereotype system_bullet_player_align
+stereotype system_collision_player_bullet
+stereotype system_starfield
+stereotype system_bullet_shoot
+stereotype system_blinking_text
+stereotype system_moving_text
+
 
 CAnimation <|-- AnimationData
-CInputCommnad <|-- CommandPhase
+CInputCommand <|-- CommandPhase
 
 Enemy *-- CTagEnemy
 Enemy *-- CAnimation
@@ -72,17 +89,18 @@ Player_Bullet *-- CTransform
 Player_Bullet *-- CVelocity
 system_screen_bullet --* Player_Bullet : Delete
 
-Input_Fire *-- CInputCommnad
-Input_Left *-- CInputCommnad
-Input_Right *-- CInputCommnad
-system_input_player --* Input_Fire : Invoke
-system_input_player --* Input_Left : Invoke
-system_input_player --* Input_Right : Invoke
+Input_Fire *-- CInputCommand
+Input_Left *-- CInputCommand
+Input_Right *-- CInputCommand
+system_input --* Input_Fire : Invoke
+system_input --* Input_Left : Invoke
+system_input --* Input_Right : Invoke
 
 system_collision_enemy_bullet --* Explotion : Create
 Explotion *-- CTagExplosion
 Explotion *-- CAnimation
 Explotion *-- system_explosion_kill :Delete
+Explotion *-- CSurface
 
 Player *-- CTagPlayer
 Player *-- CSurface
@@ -106,5 +124,68 @@ system_movement --* CVelocity
 
 system_rendering --* CTransform
 system_rendering --* CSurface
+
+system_bullet_player_align --* CSurface
+system_collision_enemy_bullet --* CSurface
+system_collision_player_bullet --* CSurface
+system_enemy_block_movement --* CSurface
+system_enemy_fire --* CSurface
+system_player_limits --* CSurface
+system_screen_bullet --* CSurface
+system_starfield --* CSurface
+
+system_collision_enemy_bullet --* CTagEnemy
+system_collision_player_bullet --* CTagEnemy
+system_enemy_block_movement --* CTagEnemy
+system_enemy_fire --* CTagEnemy
+
+system_bullet_player_align --* CTagPlayerBullet
+system_bullet_shoot --* CTagPlayerBullet
+system_collision_enemy_bullet --* CTagPlayerBullet
+system_movement --* CTagPlayerBullet
+
+system_explosion_kill --* CTagExplosion
+
+system_bullet_player_align --* CTagPlayer
+system_bullet_shoot --* CTagPlayer
+system_collision_enemy_bullet --* CTagPlayer
+system_collision_player_bullet --* CTagPlayer
+system_movement --* CTagPlayer
+system_player_limits --* CTagPlayer
+
+Star *-- CTagStar
+system_starfield --* CTagStar
+
+Player_Bullet *-- CTagBullet
+Enemy_Bullet *-- CTagBullet
+system_screen_bullet --* CTagBullet
+
+system_enemy_fire *-- CTagEnemyBullet
+system_collision_player_bullet *-- CTagEnemyBullet
+
+system_blinking_text *-- CBlinking
+
+Text --* CTransform
+
+system_blinking_text *-- CTransform
+system_bullet_player_align *-- CTransform
+system_bullet_shoot *-- CTransform
+system_collision_enemy_bullet *-- CTransform
+system_collision_player_bullet *-- CTransform
+system_enemy_block_movement *-- CTransform
+system_enemy_fire *-- CTransform
+system_moving_text *-- CTransform
+system_player_limits *-- CTransform
+system_screen_bullet *-- CTransform
+system_starfield *-- CTransform
+
+system_bullet_player_align *-- CVelocity
+system_bullet_shoot *-- CVelocity
+system_enemy_block_movement *-- CVelocity
+system_player_limits *-- CVelocity
+Text --* CVelocity
+Star --* CVelocity
+Explotion --* CVelocity
+
 
 @enduml

@@ -31,8 +31,11 @@ MISW-4407-NoobPower
 │  │  ├─ enemy_field.json
 │  │  ├─ explosion.json
 │  │  ├─ interface.json
+│  │  ├─ menu_screen.json
+│  │  ├─ pause.json
 │  │  ├─ player.json
 │  │  ├─ starfield.json
+│  │  ├─ start_screen.json
 │  │  └─ window.json
 │  ├─ fnt
 │  │  └─ PressStart2P.ttf
@@ -68,12 +71,16 @@ MISW-4407-NoobPower
 └─ src
    ├─ create
    │  ├─ prefab_creator.py
+   │  ├─ prefab_creator_interface.py
+   │  ├─ prefab_general.py
    │  └─ __init__.py
    ├─ ecs
    │  ├─ components
    │  │  ├─ c_animation.py
+   │  │  ├─ c_blinking.py
    │  │  ├─ c_input_command.py
    │  │  ├─ c_reload.py
+   │  │  ├─ c_score.py
    │  │  ├─ c_surface.py
    │  │  ├─ c_transform.py
    │  │  ├─ c_velocity.py
@@ -83,28 +90,46 @@ MISW-4407-NoobPower
    │  │  │  ├─ c_tag_enemy_bullet.py
    │  │  │  ├─ c_tag_explosion.py
    │  │  │  ├─ c_tag_player.py
-   │  │  │  └─ c_tag_player_bullet.py
+   │  │  │  ├─ c_tag_player_bullet.py
+   │  │  │  └─ c_tag_star.py
    │  │  └─ __init__.py
    │  ├─ systems
    │  │  ├─ s_animation.py
+   │  │  ├─ s_blinking_text.py
+   │  │  ├─ s_bullet_player_align.py
+   │  │  ├─ s_bullet_shoot.py
    │  │  ├─ s_collision_enemy_bullet.py
+   │  │  ├─ s_collision_player_bullet.py
    │  │  ├─ s_enemy_block_movement.py
    │  │  ├─ s_enemy_fire.py
    │  │  ├─ s_explosion_kill.py
-   │  │  ├─ s_input_player.py
+   │  │  ├─ s_input.py
    │  │  ├─ s_movement.py
+   │  │  ├─ s_moving_text.py
    │  │  ├─ s_player_limits.py
    │  │  ├─ s_rendering.py
-   │  │  ├─ s_screen_bounce.py
+   │  │  ├─ s_score.py
    │  │  ├─ s_screen_bullet.py
+   │  │  ├─ s_starfield.py
    │  │  └─ __init__.py
    │  └─ __init__.py
    ├─ engine
    │  ├─ game_engine.py
+   │  ├─ scenes
+   │  │  ├─ scene.py
+   │  │  └─ __init__.py
    │  ├─ services
-   │  │  ├─ images_services.py
-   │  │  └─ sounds_service.py
+   │  │  ├─ cfgs_service.py
+   │  │  ├─ fonts_service.py
+   │  │  ├─ images_service.py
+   │  │  ├─ sounds_service.py
+   │  │  └─ __init__.py
    │  ├─ service_locator.py
+   │  └─ __init__.py
+   ├─ game
+   │  ├─ menu_scene.py
+   │  ├─ play_scene.py
+   │  ├─ start_scene.py
    │  └─ __init__.py
    └─ __init__.py
 
