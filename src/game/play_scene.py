@@ -73,6 +73,8 @@ class PlayScene(Scene):
                 self.player_c_v = self.ecs_world.component_for_entity(self.player_entity, CVelocity)
                 self.player_c_t = self.ecs_world.component_for_entity(self.player_entity, CTransform)
                 self.player_c_s = self.ecs_world.component_for_entity(self.player_entity, CSurface)
+                create_input_player(self.ecs_world)
+                dead = False
 
             system_explosion_kill(self.ecs_world)
             system_bullet_player_align(self.ecs_world, self.bullet_cfg)

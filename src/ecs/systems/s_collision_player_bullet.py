@@ -1,7 +1,7 @@
 import pygame
 import esper
 from src.create.prefab_creator import create_explosion, create_player
-from src.ecs.components.c_input_command import CInputCommand
+from src.ecs.components.c_input_command import CInputCommand, CommandPhase
 from src.ecs.components.c_surface import CSurface
 from src.ecs.components.c_transform import CTransform
 from src.ecs.components.tags.c_tag_enemy_bullet import CTagEnemyBullet
