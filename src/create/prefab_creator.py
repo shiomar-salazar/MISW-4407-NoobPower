@@ -93,6 +93,7 @@ def create_player(world:esper.World, player_info:dict, screen:pygame.Surface):
     velocity_o = pygame.Vector2(0,0)
     player_entity = create_sprite(world, position_o, velocity_o, player_surface)
     world.add_component(player_entity, CTagPlayer())
+    create_input_player(world)
     return player_entity
 
 def create_explosion(world:esper.World, pos:pygame.Vector2, explosion_info:dict):
