@@ -61,10 +61,14 @@ def create_input_player(world: esper.World):
     input_right = world.create_entity()
     input_fire = world.create_entity()
     input_pause = world.create_entity()
+    switch_debug_view = world.create_entity()
     world.add_component(input_fire,CInputCommand("PLAYER_FIRE", pygame.K_z))
     world.add_component(input_left, CInputCommand('PLAYER_LEFT', pygame.K_LEFT))
     world.add_component(input_right, CInputCommand('PLAYER_RIGHT', pygame.K_RIGHT))
     world.add_component(input_pause, CInputCommand('PAUSE', pygame.K_p))
+    world.add_component(switch_debug_view,
+                        CInputCommand("TOGGLE_DEBUG_VIEW", 
+                                      pygame.K_SPACE))
 
 def create_bullet(world: esper.World, player_pos: pygame.Vector2,
                   player_size: pygame.Vector2, bullet_info: dict):
@@ -96,10 +100,14 @@ def create_player(world:esper.World, player_info:dict, screen:pygame.Surface):
     create_input_player(world)
     return player_entity
 
-def create_explosion(world:esper.World, pos:pygame.Vector2, explosion_info:dict):
+def create_explosion(world:esper.World, pos:pygame.Vector2, explosion_info:dict, player_explotion = False):
     explosion_surface = ServiceLocator.images_service.get(explosion_info["image"])
     vel = pygame.Vector2(0, 0)
-    explosion_ent = create_sprite(world, pos, vel, explosion_surface)
+    if player_explotion:
+        exp_pos = pygame.Vector2(pos.x - 8 ,pos.y - 8)
+    else:
+        exp_pos = pos
+    explosion_ent = create_sprite(world, exp_pos, vel, explosion_surface)
     world.add_component(explosion_ent, CTagExplosion())
     world.add_component(explosion_ent, CAnimation(explosion_info["animations"]))
     ServiceLocator.sounds_service.play(explosion_info["sound"])

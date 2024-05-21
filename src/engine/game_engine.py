@@ -50,7 +50,7 @@ class GameEngine:
             self._draw()
             self._handle_switch_scene()
             await asyncio.sleep(0)
-        self._clean()
+        self._do_clean()
 
     def switch_scene(self, new_scene_name:str):
         self._scene_name_to_switch = new_scene_name
@@ -90,7 +90,7 @@ class GameEngine:
     def _do_action(self, action:CInputCommand):        
         self._current_scene.do_action(action)
 
-    def _clean(self):
+    def _do_clean(self):
         if self._current_scene is not None:
             self._current_scene.clean()
         pygame.quit()

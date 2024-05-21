@@ -1,3 +1,4 @@
+from enum import Enum
 import pygame
 
 import src
@@ -17,9 +18,15 @@ from src.ecs.systems.s_enemy_fire import system_enemy_fire
 from src.ecs.systems.s_explosion_kill import system_explosion_kill
 from src.ecs.systems.s_movement import system_movement
 from src.ecs.systems.s_player_limits import system_player_limits
+from src.ecs.systems.s_rendering import system_rendering
+from src.ecs.systems.s_rendering_debug_rects import system_rendering_debug_rects
 from src.ecs.systems.s_screen_bullet import system_screen_bullet
 from src.engine.scenes.scene import Scene
 from src.engine.service_locator import ServiceLocator
+
+class DebugView(Enum):
+    NONE = 0
+    RECTS = 1
 
 
 class PlayScene(Scene):
@@ -37,6 +44,7 @@ class PlayScene(Scene):
         self.pause_text = None
         self.score = 0
         self.score_text = None 
+        self._debug_view = DebugView.NONE
 
     def do_create(self):
         self._interface_cfg = ServiceLocator.configurations_service.get("assets/cfg/start_screen.json")
@@ -147,5 +155,23 @@ class PlayScene(Scene):
                                                 pygame.Vector2(self._screen_surf.get_width() // 2,
                                                 self._screen_surf.get_height() // 2 + 10),
                                                 TextAlignment.CENTER)
+                
+        if action.name == "TOGGLE_DEBUG_VIEW" and action.phase == CommandPhase.START:
+            if self._debug_view == DebugView.NONE:
+                self._debug_view = DebugView.RECTS
+            else:
+                self._debug_view = DebugView.NONE
+                
+
+    def do_draw(self, screen):
+        # Evaluar vistas de depurado y vistas normales
+        if self._debug_view == DebugView.RECTS:
+            system_rendering_debug_rects(self.ecs_world, screen)
+        else:
+            system_rendering(self.ecs_world, screen)
+
+    def do_clean(self):
+        self._debug_view = DebugView.NONE
+        self._paused = False
 
                 
