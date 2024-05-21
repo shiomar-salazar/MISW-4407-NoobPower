@@ -79,7 +79,6 @@ class PlayScene(Scene):
                                     self._interface_cfg["hi_score_value"]["position"]["y"]), 
                     TextAlignment.CENTER)
         create_level(self.ecs_world, self.enemies_cfg, self.level_cfg, self.window_cfg)
-        create_input_player(self.ecs_world)
 
     def do_update(self, delta_time: float): 
         if not self.is_paused:
