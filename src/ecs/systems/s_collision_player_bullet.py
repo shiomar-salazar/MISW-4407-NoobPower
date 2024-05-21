@@ -42,4 +42,6 @@ def system_collision_player_bullet(world:esper.World, explosion_data:dict, delta
                 c_t_p._invencible = True
                 c_s.visible = False
                 create_text(world,"READY",7,pygame.Color(255,0,0),pygame.Vector2(128,120),TextAlignment.CENTER, True)
+                return True
+    return False
                 

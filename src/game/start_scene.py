@@ -50,6 +50,14 @@ class StartScene(Scene):
                     pygame.Vector2(self._interface_cfg["game_start"]["position"]["x"], 
                                     self._interface_cfg["game_start"]["position"]["y"]), 
                     TextAlignment.CENTER, isBlinking=True)
+        create_text(self.ecs_world, self._interface_cfg["Lifes"]["text"],
+                    self._interface_cfg["Lifes"]["size"],  
+                    pygame.Color(self._interface_cfg["Lifes"]["color"]["r"], 
+                                 self._interface_cfg["Lifes"]["color"]["g"], 
+                                 self._interface_cfg["Lifes"]["color"]["b"]), 
+                    pygame.Vector2(self._interface_cfg["Lifes"]["position"]["x"], 
+                                    self._interface_cfg["Lifes"]["position"]["y"]), 
+                    TextAlignment.CENTER)
         ServiceLocator.sounds_service.play(self._interface_cfg["sound"])
         self.start_time = pygame.time.get_ticks() 
 

@@ -40,15 +40,17 @@ class PlayScene(Scene):
         self.player_cfg = ServiceLocator.configurations_service.get("assets/cfg/player.json")
         self.explosion_cfg = ServiceLocator.configurations_service.get("assets/cfg/explosion.json")
         self.pause_cfg = ServiceLocator.configurations_service.get("assets/cfg/pause.json")
+        self._interface_cfg = ServiceLocator.configurations_service.get("assets/cfg/start_screen.json")
         self._screen_surf = screen_surf
         self.is_paused = False
         self.pause_text = None
         self.score = 0
         self.score_text = None 
         self._debug_view = DebugView.NONE
+        self.life_text = None
+        self.lifes = self.player_cfg["vidas"]
 
     def do_create(self):
-        self._interface_cfg = ServiceLocator.configurations_service.get("assets/cfg/start_screen.json")
         self.player_entity = create_player(self.ecs_world, self.player_cfg, self._screen_surf)
         self.player_c_v = self.ecs_world.component_for_entity(self.player_entity, CVelocity)
         self.player_c_t = self.ecs_world.component_for_entity(self.player_entity, CTransform)
@@ -85,6 +87,20 @@ class PlayScene(Scene):
                     pygame.Vector2(self._interface_cfg["hi_score_value"]["position"]["x"], 
                                     self._interface_cfg["hi_score_value"]["position"]["y"]), 
                     TextAlignment.CENTER)
+        create_text(self.ecs_world, self._interface_cfg["Lifes"]["text"],
+                    self._interface_cfg["Lifes"]["size"],  
+                    pygame.Color(self._interface_cfg["Lifes"]["color"]["r"], 
+                                 self._interface_cfg["Lifes"]["color"]["g"], 
+                                 self._interface_cfg["Lifes"]["color"]["b"]), 
+                    pygame.Vector2(self._interface_cfg["Lifes"]["position"]["x"], 
+                                    self._interface_cfg["Lifes"]["position"]["y"]), 
+                    TextAlignment.CENTER)
+        self.life_text = create_text(self.ecs_world, str(self.lifes),
+                    self._interface_cfg["Lifes"]["size"],  
+                    pygame.Color(255,255,255), 
+                    pygame.Vector2(self._interface_cfg["Lifes"]["position"]["x"], 
+                                    self._interface_cfg["Lifes"]["position"]["y"] + 10), 
+                    TextAlignment.CENTER)
         create_level(self.ecs_world, self.enemies_cfg, self.level_cfg, self.window_cfg)
 
     def do_update(self, delta_time: float): 
@@ -110,7 +126,19 @@ class PlayScene(Scene):
                     TextAlignment.CENTER)
 
             #Colisiones entre el jugador y las balas enemigas, si el jugador muere se crea una nueva instancia
-            system_collision_player_bullet(self.ecs_world, self.explosion_cfg["player_explosion"], delta_time, self._screen_surf)
+            dead = system_collision_player_bullet(self.ecs_world, self.explosion_cfg["player_explosion"], delta_time, self._screen_surf)
+            if dead:
+                self.lifes -= 1
+                if self.life_text is not None:
+                    self.ecs_world.delete_entity(self.life_text)
+                self.life_text = create_text(self.ecs_world, str(self.lifes),
+                                            self._interface_cfg["Lifes"]["size"],  
+                                            pygame.Color(255,255,255), 
+                                            pygame.Vector2(self._interface_cfg["Lifes"]["position"]["x"], 
+                                                            self._interface_cfg["Lifes"]["position"]["y"] + 10), 
+                                            TextAlignment.CENTER)
+                # TODO: Nicolas Aqui Gameover
+
             system_explosion_kill(self.ecs_world)
             system_bullet_player_align(self.ecs_world, self.bullet_cfg)
             system_animation(self.ecs_world, delta_time)
