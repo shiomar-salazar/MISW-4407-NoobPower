@@ -38,7 +38,7 @@ def create_enemy_square(world: esper.World, pos: pygame.Vector2, enemy_info: dic
     vel = pygame.Vector2(movement_vel,0)
     enemy_entity = create_sprite(world, position, vel, enemy_surface)
     world.add_component(enemy_entity, CAnimation(enemy_info["animations"]))
-    world.add_component(enemy_entity, CTagEnemy())
+    world.add_component(enemy_entity, CTagEnemy(enemy_info["score"]))
     world.add_component(enemy_entity, CReload(reload_time)) #* Tiempo de recarga para que un mismo enemigo no dispare dos veces seguidas
 
 def create_level(ecs_world:esper.World, enemies_data:dict, level_data:dict, window_data:dict):

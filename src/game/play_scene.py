@@ -19,7 +19,6 @@ from src.ecs.systems.s_enemy_fire import system_enemy_fire
 from src.ecs.systems.s_explosion_kill import system_explosion_kill
 from src.ecs.systems.s_movement import system_movement
 from src.ecs.systems.s_player_limits import system_player_limits
-from src.ecs.systems.s_score import system_score
 from src.ecs.systems.s_screen_bullet import system_screen_bullet
 from src.engine.scenes.scene import Scene
 from src.engine.service_locator import ServiceLocator
@@ -38,6 +37,8 @@ class PlayScene(Scene):
         self._screen_surf = screen_surf
         self.is_paused = False
         self.pause_text = None
+        self.score = 0
+        self.score_text = None 
 
     def do_create(self):
         self._interface_cfg = ServiceLocator.configurations_service.get("assets/cfg/start_screen.json")
@@ -45,13 +46,37 @@ class PlayScene(Scene):
         self.player_c_v = self.ecs_world.component_for_entity(self.player_entity, CVelocity)
         self.player_c_t = self.ecs_world.component_for_entity(self.player_entity, CTransform)
         self.player_c_s = self.ecs_world.component_for_entity(self.player_entity, CSurface)
-        create_text(self.ecs_world, self._interface_cfg["00"]["text"], 
-                    self._interface_cfg["00"]["size"],  
-                    pygame.Color(self._interface_cfg["00"]["color"]["r"], 
-                                 self._interface_cfg["00"]["color"]["g"], 
-                                 self._interface_cfg["00"]["color"]["b"]), 
-                    pygame.Vector2(self._interface_cfg["00"]["position"]["x"], 
-                                    self._interface_cfg["00"]["position"]["y"]), 
+        create_text(self.ecs_world, self._interface_cfg["1up"]["text"], 
+                    self._interface_cfg["1up"]["size"],  
+                    pygame.Color(self._interface_cfg["1up"]["color"]["r"], 
+                                 self._interface_cfg["1up"]["color"]["g"], 
+                                 self._interface_cfg["1up"]["color"]["b"]), 
+                    pygame.Vector2(self._interface_cfg["1up"]["position"]["x"], 
+                                    self._interface_cfg["1up"]["position"]["y"]), 
+                    TextAlignment.CENTER)
+        self.score_text = create_text(self.ecs_world, self._interface_cfg["score"]["text"], 
+                    self._interface_cfg["score"]["size"],  
+                    pygame.Color(self._interface_cfg["score"]["color"]["r"], 
+                                 self._interface_cfg["score"]["color"]["g"], 
+                                 self._interface_cfg["score"]["color"]["b"]), 
+                    pygame.Vector2(self._interface_cfg["score"]["position"]["x"], 
+                                    self._interface_cfg["score"]["position"]["y"]), 
+                    TextAlignment.CENTER)
+        create_text(self.ecs_world, self._interface_cfg["hi_score"]["text"], 
+                    self._interface_cfg["hi_score"]["size"],  
+                    pygame.Color(self._interface_cfg["hi_score"]["color"]["r"], 
+                                 self._interface_cfg["hi_score"]["color"]["g"], 
+                                 self._interface_cfg["hi_score"]["color"]["b"]), 
+                    pygame.Vector2(self._interface_cfg["hi_score"]["position"]["x"], 
+                                    self._interface_cfg["hi_score"]["position"]["y"]), 
+                    TextAlignment.CENTER)
+        create_text(self.ecs_world, self._interface_cfg["hi_score_value"]["text"], 
+                    self._interface_cfg["hi_score_value"]["size"],  
+                    pygame.Color(self._interface_cfg["hi_score_value"]["color"]["r"], 
+                                 self._interface_cfg["hi_score_value"]["color"]["g"], 
+                                 self._interface_cfg["hi_score_value"]["color"]["b"]), 
+                    pygame.Vector2(self._interface_cfg["hi_score_value"]["position"]["x"], 
+                                    self._interface_cfg["hi_score_value"]["position"]["y"]), 
                     TextAlignment.CENTER)
         create_level(self.ecs_world, self.enemies_cfg, self.level_cfg, self.window_cfg)
         create_input_player(self.ecs_world)
@@ -59,12 +84,24 @@ class PlayScene(Scene):
     def do_update(self, delta_time: float): 
         if not self.is_paused:
             system_movement(self.ecs_world, delta_time)
-            system_score(self.ecs_world)
             system_enemy_block_movement(self.ecs_world, delta_time, self.window_cfg["size"]["w"])
             system_enemy_fire(self.ecs_world, delta_time, self.bullet_cfg)
             system_screen_bullet(self.ecs_world, self._screen_surf)
             system_player_limits(self.ecs_world, self._screen_surf)
-            system_collision_enemy_bullet(self.ecs_world, self.explosion_cfg["enemy_explosion"])
+
+            #actualización de puntaje cuando se destruye un enemigo
+            new_score = system_collision_enemy_bullet(self.ecs_world, self.explosion_cfg["enemy_explosion"])
+            self.score += new_score
+            if self.score_text is not None:
+                self.ecs_world.delete_entity(self.score_text)
+            self.score_text = create_text(self.ecs_world, str(self.score), 
+                    self._interface_cfg["score"]["size"],  
+                    pygame.Color(self._interface_cfg["score"]["color"]["r"], 
+                                self._interface_cfg["score"]["color"]["g"], 
+                                self._interface_cfg["score"]["color"]["b"]), 
+                    pygame.Vector2(self._interface_cfg["score"]["position"]["x"], 
+                                    self._interface_cfg["score"]["position"]["y"]), 
+                    TextAlignment.CENTER)
 
             #Colisiones entre el jugador y las balas enemigas, si el jugador muere se crea una nueva instancia
             dead = system_collision_player_bullet(self.ecs_world, self.explosion_cfg["player_explosion"], self.player_cfg, self._screen_surf)
