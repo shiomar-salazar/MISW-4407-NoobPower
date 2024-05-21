@@ -3,6 +3,7 @@
   "reload_time": 5,
   "EnemyA": {
     "image": "assets/img/invaders_enemy_01.png",
+    "score": 30,
     "animations": {
       "number_frames": 5,
       "list": [
@@ -23,6 +24,7 @@
   },
   "EnemyB": {
     "image": "assets/img/invaders_enemy_02.png",
+    "score": 40,
     "animations": {
       "number_frames": 5,
       "list": [
@@ -43,6 +45,7 @@
   },
   "EnemyC": {
     "image": "assets/img/invaders_enemy_03.png",
+    "score": 50,
     "animations": {
       "number_frames": 5,
       "list": [
@@ -63,6 +66,7 @@
   },
   "EnemyD": {
     "image": "assets/img/invaders_enemy_04.png",
+    "score": 100,
     "animations": {
       "number_frames": 1,
       "list": [
