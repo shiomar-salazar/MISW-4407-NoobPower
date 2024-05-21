@@ -19,7 +19,7 @@ def system_collision_player_bullet(world:esper.World, explosion_data:dict, playe
             if player_rect.colliderect(enemy_bullet_rect):
                 world.delete_entity(enemy_bullet_ent)
                 create_explosion(world, c_t.pos, explosion_data, True)
-                # ps_size = c_s.surf.get_size()
-                # c_t.pos.x = screen.get_rect().midbottom[0] - ps_size[0]/2
-                # c_t.pos.y = screen.get_rect().midbottom[1] - ps_size[1]/2 - 15
+                ps_size = c_s.surf.get_size()
+                c_t.pos.x = screen.get_rect().midbottom[0] - ps_size[0]/2
+                c_t.pos.y = screen.get_rect().midbottom[1] - ps_size[1]/2 - 15
                 
