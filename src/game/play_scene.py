@@ -1,5 +1,3 @@
-import json
-
 import pygame
 
 import src
@@ -103,13 +101,7 @@ class PlayScene(Scene):
                     TextAlignment.CENTER)
 
             #Colisiones entre el jugador y las balas enemigas, si el jugador muere se crea una nueva instancia
-            dead = system_collision_player_bullet(self.ecs_world, self.explosion_cfg["player_explosion"], self.player_cfg, self._screen_surf)
-            if dead:
-                self.player_entity = create_player(self.ecs_world, self.player_cfg, self._screen_surf)
-                self.player_c_v = self.ecs_world.component_for_entity(self.player_entity, CVelocity)
-                self.player_c_t = self.ecs_world.component_for_entity(self.player_entity, CTransform)
-                self.player_c_s = self.ecs_world.component_for_entity(self.player_entity, CSurface)
-
+            system_collision_player_bullet(self.ecs_world, self.explosion_cfg["player_explosion"], self.player_cfg, self._screen_surf)
             system_explosion_kill(self.ecs_world)
             system_bullet_player_align(self.ecs_world, self.bullet_cfg)
             system_animation(self.ecs_world, delta_time)
