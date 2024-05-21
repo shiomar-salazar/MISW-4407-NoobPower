@@ -9,6 +9,7 @@ from src.ecs.components.c_surface import CSurface
 from src.ecs.components.c_transform import CTransform
 from src.ecs.components.c_velocity import CVelocity
 from src.ecs.systems.s_animation import system_animation
+from src.ecs.systems.s_blinking_text import system_blinking_text
 from src.ecs.systems.s_bullet_player_align import system_bullet_player_align
 from src.ecs.systems.s_bullet_shoot import system_bullet_shoot
 from src.ecs.systems.s_collision_enemy_bullet import system_collision_enemy_bullet
@@ -109,10 +110,11 @@ class PlayScene(Scene):
                     TextAlignment.CENTER)
 
             #Colisiones entre el jugador y las balas enemigas, si el jugador muere se crea una nueva instancia
-            system_collision_player_bullet(self.ecs_world, self.explosion_cfg["player_explosion"], self.player_cfg, self._screen_surf)
+            system_collision_player_bullet(self.ecs_world, self.explosion_cfg["player_explosion"], delta_time, self._screen_surf)
             system_explosion_kill(self.ecs_world)
             system_bullet_player_align(self.ecs_world, self.bullet_cfg)
             system_animation(self.ecs_world, delta_time)
+            system_blinking_text(self.ecs_world, delta_time)
             self.ecs_world._clear_dead_entities()
         
     def do_action(self, action: CInputCommand):
