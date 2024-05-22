@@ -29,6 +29,10 @@ Espacio de Trabajo del Equipo Noob Power para la Materia MISW-4407: Introduccion
   - No se muestra texto, por exceso de informacion que lo hace ilegible.
   - Se utilizo para debiggear las animaciones de las explociones.
 
+## Enlace al Juego Publicado
+
+[itch.io](https://krimyr.itch.io/invaders-noob-power)
+
 ## Estructura del Proyecto
 ```
 MISW-4407-NoobPower
