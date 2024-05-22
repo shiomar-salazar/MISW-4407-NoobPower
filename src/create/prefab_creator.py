@@ -68,7 +68,7 @@ def create_input_player(world: esper.World):
     world.add_component(input_left, CInputCommand('PLAYER_LEFT', pygame.K_LEFT))
     world.add_component(input_right, CInputCommand('PLAYER_RIGHT', pygame.K_RIGHT))
     world.add_component(input_pause, CInputCommand('PAUSE', pygame.K_p))
-    world.add_component(input_pause, CInputCommand('GOD_MODE', pygame.K_g))
+    world.add_component(invencible_mode, CInputCommand('GOD_MODE', pygame.K_g))
     world.add_component(switch_debug_view,
                         CInputCommand("TOGGLE_DEBUG_VIEW", 
                                       pygame.K_SPACE))
