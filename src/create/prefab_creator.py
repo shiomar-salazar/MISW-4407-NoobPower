@@ -63,10 +63,12 @@ def create_input_player(world: esper.World):
     input_pause = world.create_entity()
     switch_debug_view = world.create_entity()
     restart_game = world.create_entity()
+    invencible_mode = world.create_entity()
     world.add_component(input_fire,CInputCommand("PLAYER_FIRE", pygame.K_z))
     world.add_component(input_left, CInputCommand('PLAYER_LEFT', pygame.K_LEFT))
     world.add_component(input_right, CInputCommand('PLAYER_RIGHT', pygame.K_RIGHT))
     world.add_component(input_pause, CInputCommand('PAUSE', pygame.K_p))
+    world.add_component(input_pause, CInputCommand('GOD_MODE', pygame.K_g))
     world.add_component(switch_debug_view,
                         CInputCommand("TOGGLE_DEBUG_VIEW", 
                                       pygame.K_SPACE))

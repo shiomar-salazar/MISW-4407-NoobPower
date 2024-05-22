@@ -22,6 +22,7 @@ from src.ecs.systems.s_player_limits import system_player_limits
 from src.ecs.systems.s_rendering import system_rendering
 from src.ecs.systems.s_rendering_debug_rects import system_rendering_debug_rects
 from src.ecs.systems.s_screen_bullet import system_screen_bullet
+from src.ecs.systems.s_toggle_god_mode import system_toggle_god_mode
 from src.engine.scenes.scene import Scene
 from src.engine.service_locator import ServiceLocator
 
@@ -52,6 +53,7 @@ class PlayScene(Scene):
         self.lifes = self.player_cfg["vidas"]
         self.level_text = None
         self.level = 1
+        self.god_text = None
 
     def do_create(self):
         self.level_text = create_text(self.ecs_world, str(self.level), 
@@ -225,6 +227,16 @@ class PlayScene(Scene):
                 self._debug_view = DebugView.RECTS
             else:
                 self._debug_view = DebugView.NONE
+
+        if action.name == "GOD_MODE" and action.phase == CommandPhase.START:
+            if system_toggle_god_mode(self.ecs_world):
+                self.god_text = create_text(self.ecs_world, "God Mode", 7,
+                                                pygame.Color(0,255,0),
+                                                pygame.Vector2(30,230),
+                                                TextAlignment.CENTER,True)
+            else:
+                if self.god_text != None:
+                    self.ecs_world.delete_entity(self.god_text)
                 
 
     def do_draw(self, screen):

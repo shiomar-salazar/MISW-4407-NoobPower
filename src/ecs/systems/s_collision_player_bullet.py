@@ -33,7 +33,7 @@ def system_collision_player_bullet(world:esper.World, explosion_data:dict, delta
         player_rect = CSurface.get_area_relative(c_s.area, c_t.pos)
         for enemy_bullet_ent, (c_b_s, c_b_t, _) in components_enemy_bullet:
             enemy_bullet_rect = CSurface.get_area_relative(c_b_s.area, c_b_t.pos)
-            if player_rect.colliderect(enemy_bullet_rect) and c_t_p._invencible == False:
+            if player_rect.colliderect(enemy_bullet_rect) and c_t_p._invencible == False and c_t_p._godMode == False:
                 
                 world.delete_entity(enemy_bullet_ent)
                 for entity ,_ in component_player_bullet:
