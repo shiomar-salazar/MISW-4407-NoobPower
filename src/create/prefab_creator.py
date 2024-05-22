@@ -62,6 +62,7 @@ def create_input_player(world: esper.World):
     input_fire = world.create_entity()
     input_pause = world.create_entity()
     switch_debug_view = world.create_entity()
+    restart_game = world.create_entity()
     world.add_component(input_fire,CInputCommand("PLAYER_FIRE", pygame.K_z))
     world.add_component(input_left, CInputCommand('PLAYER_LEFT', pygame.K_LEFT))
     world.add_component(input_right, CInputCommand('PLAYER_RIGHT', pygame.K_RIGHT))
@@ -69,6 +70,7 @@ def create_input_player(world: esper.World):
     world.add_component(switch_debug_view,
                         CInputCommand("TOGGLE_DEBUG_VIEW", 
                                       pygame.K_SPACE))
+    world.add_component(restart_game, CInputCommand("RESTART_GAME", pygame.K_ESCAPE))
 
 def create_bullet(world: esper.World, player_pos: pygame.Vector2,
                   player_size: pygame.Vector2, bullet_info: dict):
@@ -83,7 +85,7 @@ def create_bullet(world: esper.World, player_pos: pygame.Vector2,
 
 def create_enemy_bullet(world: esper.World, enemy_pos: pygame.Vector2, bullet_info: dict):
     size = pygame.Vector2(bullet_info["size"]["x"], bullet_info["size"]["y"])
-    color = pygame.Color(bullet_info["color"]["r"], bullet_info["color"]["g"], bullet_info["color"]["b"])
+    color = pygame.Color(bullet_info["enemy_bullet"]["color"]["r"], bullet_info["enemy_bullet"]["color"]["g"], bullet_info["enemy_bullet"]["color"]["b"])
     pos = pos = pygame.Vector2(enemy_pos.x, enemy_pos.y)
     vel = pygame.Vector2(0, bullet_info["enemy_bullet"]["velocity"])
     enemy_bullet_entity = create_square(world, size, pos, vel, color)

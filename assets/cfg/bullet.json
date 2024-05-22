@@ -13,6 +13,11 @@
   "enemy_bullet": {
     "velocity": 80,
     "max_enemy_bullets": 8,
-    "fire_prob": 0.001
+    "fire_prob": 0.001,
+    "color": {
+      "r": 255,
+      "g": 255,
+      "b": 255
+    }
   }
 }

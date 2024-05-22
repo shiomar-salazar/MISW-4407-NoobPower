@@ -1,5 +1,5 @@
 {
-    "image": "assets/img/invaders_char.png",
-    "input_velocity":150,
-    "vidas": 6
+  "image": "assets/img/invaders_char.png",
+  "input_velocity": 150,
+  "vidas": 6
 }

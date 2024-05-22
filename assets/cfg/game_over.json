@@ -1,0 +1,14 @@
+{
+  "sound": "assets/snd/game_over.ogg",
+  "text": "GAME OVER",
+  "size": 8,
+  "color": {
+    "r": 255,
+    "g": 255,
+    "b": 255
+  },
+  "position": {
+    "x": 128,
+    "y": 120
+  }
+}

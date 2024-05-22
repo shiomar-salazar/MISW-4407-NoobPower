@@ -41,6 +41,7 @@ class PlayScene(Scene):
         self.explosion_cfg = ServiceLocator.configurations_service.get("assets/cfg/explosion.json")
         self.pause_cfg = ServiceLocator.configurations_service.get("assets/cfg/pause.json")
         self._interface_cfg = ServiceLocator.configurations_service.get("assets/cfg/start_screen.json")
+        self.game_over_cfg = ServiceLocator.configurations_service.get("assets/cfg/game_over.json")
         self._screen_surf = screen_surf
         self.is_paused = False
         self.pause_text = None
@@ -105,9 +106,10 @@ class PlayScene(Scene):
 
     def do_update(self, delta_time: float): 
         if not self.is_paused:
+            if self.lifes != 0:
+                system_enemy_fire(self.ecs_world, delta_time, self.bullet_cfg)
             system_movement(self.ecs_world, delta_time)
             system_enemy_block_movement(self.ecs_world, delta_time, self.window_cfg["size"]["w"])
-            system_enemy_fire(self.ecs_world, delta_time, self.bullet_cfg)
             system_screen_bullet(self.ecs_world, self._screen_surf)
             system_player_limits(self.ecs_world, self._screen_surf)
 
@@ -137,7 +139,16 @@ class PlayScene(Scene):
                                             pygame.Vector2(self._interface_cfg["Lifes"]["position"]["x"], 
                                                             self._interface_cfg["Lifes"]["position"]["y"] + 10), 
                                             TextAlignment.CENTER)
-                # TODO: Nicolas Aqui Gameover
+                if self.lifes == 0:
+                    ServiceLocator.sounds_service.play(self.game_over_cfg["sound"])
+                    create_text(self.ecs_world, self.game_over_cfg["text"], self.game_over_cfg["size"], 
+                                pygame.Color(self.game_over_cfg["color"]["r"],self.game_over_cfg["color"]["g"],self.game_over_cfg["color"]["b"]), 
+                                pygame.Vector2(self.game_over_cfg["position"]["x"], self.game_over_cfg["position"]["y"]), 
+                                TextAlignment.CENTER, True)
+                    self.ecs_world.delete_entity(self.player_entity)
+                    return
+                else:
+                    create_text(self.ecs_world,"READY",7,pygame.Color(255,0,0),pygame.Vector2(128,120),TextAlignment.CENTER, True)
 
             system_explosion_kill(self.ecs_world)
             system_bullet_player_align(self.ecs_world, self.bullet_cfg)
@@ -185,6 +196,11 @@ class PlayScene(Scene):
                                                 pygame.Vector2(self._screen_surf.get_width() // 2,
                                                 self._screen_surf.get_height() // 2 + 10),
                                                 TextAlignment.CENTER)
+        if action.name == "RESTART_GAME" and action.phase == CommandPhase.START:
+            if self.lifes == 0:
+                self.lifes = self.player_cfg["vidas"]
+                self.score = 0
+                self._game_engine.switch_scene("MENU_SCENE")
                 
         if action.name == "TOGGLE_DEBUG_VIEW" and action.phase == CommandPhase.START:
             if self._debug_view == DebugView.NONE:
