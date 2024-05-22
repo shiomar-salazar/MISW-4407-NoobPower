@@ -47,10 +47,15 @@ class CBlinking {
     alpha:Int
 }
 
-class CTagEnemy
+class CTagPlayer {
+    _invencible: bool
+    actual_time:float
+    _godMode: bool
+}
+
+class CTagEnemy 
 class CTagBullet
 class CTagExplosion
-class CTagPlayer
 class CTagEnemyBullet
 class CTagPlayerBullet
 class CTagStar

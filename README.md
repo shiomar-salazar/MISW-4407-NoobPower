@@ -15,6 +15,20 @@ Espacio de Trabajo del Equipo Noob Power para la Materia MISW-4407: Introduccion
 
 <img src="https://github.com/shiomar-salazar/MISW-4407-NoobPower/blob/main/Documentation/digram.png">
 
+## Contorles del Juego
+- `Flechas direcionales`: Para mover al Jugador de Izquierda a Derecha.
+- `Tecla Z`: Boton de Funcion:
+  - Para Iniciar el Juego.
+  - Para disparar proyectil.
+- `Tecla G`: Para funcionalidad Extra, God Mode.
+  - En este modo sale un texto en verde anunciando el modo.
+  - La balas de los enemigo no hacen daño al jugador.
+- `Barra Espaciadora`: Vista de Debug:
+  - Se activa la vista de debug de rectangulos.
+  - Se muestra los puntos de origen de las entidades dibujadas y sus superficies.
+  - No se muestra texto, por exceso de informacion que lo hace ilegible.
+  - Se utilizo para debiggear las animaciones de las explociones.
+
 ## Estructura del Proyecto
 ```
 MISW-4407-NoobPower
@@ -30,6 +44,7 @@ MISW-4407-NoobPower
 │  │  ├─ enemies.json
 │  │  ├─ enemy_field.json
 │  │  ├─ explosion.json
+│  │  ├─ game_over.json
 │  │  ├─ interface.json
 │  │  ├─ menu_screen.json
 │  │  ├─ pause.json
@@ -80,7 +95,6 @@ MISW-4407-NoobPower
    │  │  ├─ c_blinking.py
    │  │  ├─ c_input_command.py
    │  │  ├─ c_reload.py
-   │  │  ├─ c_score.py
    │  │  ├─ c_surface.py
    │  │  ├─ c_transform.py
    │  │  ├─ c_velocity.py
@@ -108,9 +122,10 @@ MISW-4407-NoobPower
    │  │  ├─ s_moving_text.py
    │  │  ├─ s_player_limits.py
    │  │  ├─ s_rendering.py
-   │  │  ├─ s_score.py
+   │  │  ├─ s_rendering_debug_rects.py
    │  │  ├─ s_screen_bullet.py
    │  │  ├─ s_starfield.py
+   │  │  ├─ s_toggle_god_mode.py
    │  │  └─ __init__.py
    │  └─ __init__.py
    ├─ engine
