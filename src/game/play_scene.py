@@ -2,7 +2,7 @@ from enum import Enum
 import pygame
 
 import src
-from src.create.prefab_creator import create_input_player, create_level, create_player
+from src.create.prefab_creator import create_level, create_player
 from src.create.prefab_creator_interface import TextAlignment, create_text
 from src.ecs.components.c_input_command import CInputCommand, CommandPhase
 from src.ecs.components.c_surface import CSurface
@@ -50,8 +50,16 @@ class PlayScene(Scene):
         self._debug_view = DebugView.NONE
         self.life_text = None
         self.lifes = self.player_cfg["vidas"]
+        self.level_text = None
+        self.level = 1
 
     def do_create(self):
+        self.level_text = create_text(self.ecs_world, str(self.level), 
+                    self._interface_cfg["Level"]["size"],  
+                    pygame.Color(255,255,255), 
+                    pygame.Vector2(self._interface_cfg["Level"]["position"]["x"], 
+                                    self._interface_cfg["Level"]["position"]["y"] + 10), 
+                    TextAlignment.CENTER)
         self.player_entity = create_player(self.ecs_world, self.player_cfg, self._screen_surf)
         self.player_c_v = self.ecs_world.component_for_entity(self.player_entity, CVelocity)
         self.player_c_t = self.ecs_world.component_for_entity(self.player_entity, CTransform)
@@ -102,6 +110,14 @@ class PlayScene(Scene):
                     pygame.Vector2(self._interface_cfg["Lifes"]["position"]["x"], 
                                     self._interface_cfg["Lifes"]["position"]["y"] + 10), 
                     TextAlignment.CENTER)
+        create_text(self.ecs_world, self._interface_cfg["Level"]["text"],
+                    self._interface_cfg["Level"]["size"],  
+                    pygame.Color(self._interface_cfg["Level"]["color"]["r"], 
+                                 self._interface_cfg["Level"]["color"]["g"], 
+                                 self._interface_cfg["Level"]["color"]["b"]), 
+                    pygame.Vector2(self._interface_cfg["Level"]["position"]["x"], 
+                                    self._interface_cfg["Level"]["position"]["y"]), 
+                    TextAlignment.CENTER)
         create_level(self.ecs_world, self.enemies_cfg, self.level_cfg, self.window_cfg)
 
     def do_update(self, delta_time: float): 
@@ -114,7 +130,7 @@ class PlayScene(Scene):
             system_player_limits(self.ecs_world, self._screen_surf)
 
             #actualización de puntaje cuando se destruye un enemigo
-            new_score = system_collision_enemy_bullet(self.ecs_world, self.explosion_cfg["enemy_explosion"])
+            new_score, reset = system_collision_enemy_bullet(self.ecs_world, self.explosion_cfg["enemy_explosion"])
             self.score += new_score
             if self.score_text is not None:
                 self.ecs_world.delete_entity(self.score_text)
@@ -149,11 +165,13 @@ class PlayScene(Scene):
                     return
                 else:
                     create_text(self.ecs_world,"READY",7,pygame.Color(255,0,0),pygame.Vector2(128,120),TextAlignment.CENTER, True)
-
             system_explosion_kill(self.ecs_world)
             system_bullet_player_align(self.ecs_world, self.bullet_cfg)
             system_animation(self.ecs_world, delta_time)
             system_blinking_text(self.ecs_world, delta_time)
+            if reset:
+                self.level += 1
+                self._game_engine.switch_scene("PLAY_GAME")
             self.ecs_world._clear_dead_entities()
         
     def do_action(self, action: CInputCommand):
