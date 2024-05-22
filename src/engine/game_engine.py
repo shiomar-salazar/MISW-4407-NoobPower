@@ -21,8 +21,7 @@ class GameEngine:
         self.ecs_world = esper.World()
         pygame.display.set_caption(self._window_cfg["title"])
         self.screen = pygame.display.set_mode(
-            (self._window_cfg["size"]["w"], self._window_cfg["size"]["h"]),
-            pygame.SCALED)
+            (self._window_cfg["size"]["w"], self._window_cfg["size"]["h"]))
 
         self._clock = pygame.time.Clock()
         self._framerate = self._window_cfg["framerate"]
